@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+body {
+    margin: 0;
+}
+$primary-color: #051133; // Blue
+$secondary-color: #2ecc71; // Green
+$danger-color: #e74c3c; // Red
+$text-color: #ffaa44; // Dark gray
+$background-color: #ecf0f1; // Light gray
