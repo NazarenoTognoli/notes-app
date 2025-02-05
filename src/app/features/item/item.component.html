@@ -1,0 +1,28 @@
+<mat-card 
+    class="item" 
+    [ngClass]="{'ih': hovered}" 
+    (mouseenter)="hovered = true" 
+    (mouseleave)="hovered = false">
+    
+    <div 
+        class="mask" 
+        [ngClass]="{'mask-ih': multipleSelection() || hovered}">
+        <div class="mask__header">
+            <mat-checkbox
+                (change)="updateCheckbox($event.checked)">
+            </mat-checkbox>
+        </div>
+        <div class="mask__item-trigger"></div>
+    </div>
+
+    <mat-card-header class="header">
+        <mat-card-title class="header__id">id: {{data().id}} - {{data().title}}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="body">
+        <span class="body__content">
+            {{data().content}}
+        </span>
+    </mat-card-content>
+    
+</mat-card>

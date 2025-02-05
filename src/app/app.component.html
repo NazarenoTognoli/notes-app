@@ -1,15 +1,11 @@
 <header id="header">
-  <button mat-flat-button id="add-button" (click)="">new</button>
-  <button mat-mini-fab aria-label="Example icon button with a menu icon">
-      <mat-icon id="icon" style="color:white">
+  <button mat-button id="add-button">add</button> <!-- This should be a separated component -->
+  <button id="option" mat-mini-fab aria-label="Example icon button with a menu icon">
+      <mat-icon>
         menu
       </mat-icon>
   </button>
 </header>
 <div id="app-body">
-
-
-  <!------ Here should be the items -------->
-
-
+  <app-item *ngFor="let item of items" [data]="item" (selectionUpdate)="selectionSome($event)" [multipleSelection]="multipleSelection"></app-item>
 </div>
