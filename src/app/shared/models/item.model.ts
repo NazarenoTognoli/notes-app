@@ -4,7 +4,7 @@ export interface Item {
   content: string;
 }
 
-export interface ReactiveItemOutput {
+export interface ReactiveItem {
   id: number;
   selected: boolean;
 }

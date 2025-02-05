@@ -2,7 +2,7 @@ import { Component, input, output, computed, signal, OnInit, effect } from '@ang
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { Item, ReactiveItemOutput } from '@app/shared/models/item.model';
+import { Item, ReactiveItem } from '@app/shared/models/item.model';
 
 @Component({
   selector: 'app-item',
@@ -15,7 +15,7 @@ export class ItemComponent {
 
   data = input.required<Item>();
 
-  selectionUpdate = output<ReactiveItemOutput>();
+  selectionUpdate = output<ReactiveItem>();
 
   multipleSelection = input<boolean>();
 

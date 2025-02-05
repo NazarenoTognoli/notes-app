@@ -1,76 +1,60 @@
-import { Component, signal, AfterViewInit, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+//ANGULAR
 import { CommonModule } from '@angular/common';
+import { Component, signal, effect } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+//SERVICES
 import {GetItemsService} from './core/get-items.service';
-
+//ANGULAR MATERIAL
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatGridListModule} from '@angular/material/grid-list';
-
+//COMPONENTS
 import { ItemComponent} from '@app/features/item/item.component';
-import { Item, ReactiveItemOutput } from '@app/shared/models/item.model';
-import { Reactive } from '@angular/core/primitives/signals';
+//MODELS
+import { Item, ReactiveItem } from '@app/shared/models/item.model';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MatButtonModule, MatIconModule, ItemComponent, CommonModule, MatGridListModule],
+  imports: [
+    RouterOutlet, 
+    MatButtonModule, 
+    MatIconModule, 
+    ItemComponent, 
+    CommonModule, 
+    MatGridListModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  items:Item[] = [];
-  reactiveItems:ReactiveItemOutput[] = [];
+  items = signal<Item[]>([]);
+  reactiveItems:ReactiveItem[] = [];
   multipleSelection = false;
 
-   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['items'] && this.items) {
-      this.reactiveItems = this.items.map(item => ({
-        id: item.id,        // Extract the id
-        selected: false     // Add the selected property and set it to false by default
+  constructor(private getItemsService: GetItemsService){
+    this.items.set(this.getItemsService.getItems());
+    effect(()=>{
+      this.reactiveItems = this.items().map(item=>({
+        id:item.id,
+        selected:false,
       }));
-      console.log("UPDATED reactive items " + JSON.stringify(this.reactiveItems)); // Log the modified array with 'selected' property
-    }
+    });
   }
 
-  constructor(private getItemsService: GetItemsService){}
-
-  selectionSome(state:ReactiveItemOutput){
-    if (this.reactiveItems) {
-      // Map through reactiveItems and return a new object with updated 'selected' status
-      this.reactiveItems = this.reactiveItems.map(item => {
-        // Check if the id matches
-        if (item.id === state.id) {
-          // Return updated object
-          console.log("Id matched");
-          return {
-            ...item,          // Spread the existing item
-            selected: state.selected  // Update the 'selected' property
-          };
-        }
-        // If no match, return the item as is
-        console.error("no id matched in selection some at app component");
-        return item;
-      });
-      console.log("UPDATED reactive items (If there is no id match error) " + JSON.stringify(this.reactiveItems));
-      this.multipleSelection = this.reactiveItems.some(item => item.selected);
-    } else {
+  selectionSome(state:ReactiveItem):void{
+    if (!this.reactiveItems) {
       console.error("reactiveItems undefined in selectionSome");
+      return;
     }
-
-  }
-  
-  ngOnInit(){
-    this.items = this.getItemsService.getItems();
-    console.log("items " + JSON.stringify(this.items));
-    if(this.items){
-      this.reactiveItems = this.items.map(item => ({
-        id: item.id,        // Extract the id
-        selected: false     // Add the selected property and set it to false by default
-      }));
-      console.log("GENERATED Reactive Items " + JSON.stringify(this.reactiveItems));
-    } else {
-      console.error("items undefined in app component");
-    }
+    this.reactiveItems = this.reactiveItems.map(item => {
+      if (item.id === state.id) {
+        return {
+          ...item,
+          selected: state.selected 
+        };
+      }
+      return item;
+    });
+    this.multipleSelection = this.reactiveItems.some(item => item.selected);
   }
 }
