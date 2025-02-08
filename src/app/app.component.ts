@@ -1,7 +1,10 @@
 //ANGULAR
 import { CommonModule } from '@angular/common';
-import { Component, signal, effect } from '@angular/core';
+import { Component, signal, effect, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+//LIBRARIES
+import { of, from } from 'rxjs';
+import { concatMap, delay } from 'rxjs/operators';
 //SERVICES
 import {GetItemsService} from './core/get-items.service';
 //ANGULAR MATERIAL
@@ -28,33 +31,67 @@ import { Item, ReactiveItem } from '@app/shared/models/item.model';
 })
 export class AppComponent {
   items = signal<Item[]>([]);
-  reactiveItems:ReactiveItem[] = [];
+  reactiveItems = signal<ReactiveItem[]>([]);
   multipleSelection = false;
+  firstLoad = true;
 
   constructor(private getItemsService: GetItemsService){
-    this.items.set(this.getItemsService.getItems());
-    effect(()=>{
-      this.reactiveItems = this.items().map(item=>({
-        id:item.id,
-        selected:false,
-      }));
+    effect(()=> this.items().length > 0 ? this.syncReactiveItems() : undefined, {allowSignalWrites:true});
+  }
+
+  syncReactiveItems():void {
+    const synchronizedReactiveItems = this.items().map(item => ({
+      id: item.id,
+      selected:false,
+    }));
+    this.reactiveItems.set([...synchronizedReactiveItems]);
+    //This shouldn't have any relation with the change of reference of this.items
+  }
+
+  checkFirstLoad(data:Item[]):void{
+    if (this.firstLoad) {
+      const newItems:Item[] = [];
+      const items = [...data];
+      let time = 0;
+      items.forEach(item => {
+        setTimeout(()=>{
+          newItems.push(item);
+          this.items.set(newItems);
+        }, time += 250);
+      });
+      this.firstLoad = false;
+    } 
+    else {
+      this.items.set(data);
+    }
+  }
+
+  refreshItems():void{
+    this.getItemsService.getItems().subscribe(items => {
+      this.checkFirstLoad(items);
     });
   }
 
-  selectionSome(state:ReactiveItem):void{
-    if (!this.reactiveItems) {
-      console.error("reactiveItems undefined in selectionSome");
-      return;
-    }
-    this.reactiveItems = this.reactiveItems.map(item => {
-      if (item.id === state.id) {
-        return {
-          ...item,
-          selected: state.selected 
-        };
-      }
-      return item;
-    });
-    this.multipleSelection = this.reactiveItems.some(item => item.selected);
+  refreshReactiveItems(state:ReactiveItem):void{
+    const refreshedReactiveItems = this.reactiveItems().map(item => 
+      item.id === state.id ? {...item, selected:state.selected} : item
+    ); 
+    this.reactiveItems.set([...refreshedReactiveItems]);
+  }
+
+  checkMultipleSelection():void{
+    this.multipleSelection = this.reactiveItems().some(item => item.selected);
+  }
+
+  handleCheckboxUpdate(state:ReactiveItem):void{
+    this.refreshReactiveItems(state);
+    this.checkMultipleSelection();
+  }
+
+  ngOnInit(){
+    this.refreshItems();
+    setTimeout(()=>{
+      this.refreshItems(); //Added new item simulation refresh
+    },4000);
   }
 }

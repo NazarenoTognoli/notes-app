@@ -13,16 +13,16 @@ import { Item, ReactiveItem } from '@app/shared/models/item.model';
 })
 export class ItemComponent {
 
-  data = input.required<Item>();
+  hovered = false;
 
-  selectionUpdate = output<ReactiveItem>();
+  data = input.required<Item>();
 
   multipleSelection = input<boolean>();
 
-  hovered = false;
+  checkboxUpdate = output<ReactiveItem>();
 
   updateCheckbox = (state:boolean) => {
-    this.selectionUpdate.emit({ id: this.data().id, selected: state });
+    this.checkboxUpdate.emit({ id: this.data().id, selected: state });
   }
 
 }

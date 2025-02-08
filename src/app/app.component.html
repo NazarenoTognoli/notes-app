@@ -7,5 +7,5 @@
   </button>
 </header>
 <div id="app-body">
-  <app-item *ngFor="let item of items()" [data]="item" (selectionUpdate)="selectionSome($event)" [multipleSelection]="multipleSelection"></app-item>
+  <app-item *ngFor="let item of items()" [data]="item" (checkboxUpdate)="handleCheckboxUpdate($event)" [multipleSelection]="multipleSelection"></app-item>
 </div>
