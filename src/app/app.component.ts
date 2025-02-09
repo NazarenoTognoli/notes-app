@@ -14,7 +14,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 //COMPONENTS
 import { ItemComponent} from '@app/features/item/item.component';
 //MODELS
-import { Item, ReactiveItem } from '@app/shared/models/item.model';
+import { Item, ReactiveItem, dummyDatabase } from '@app/shared/models/item.model';
 
 @Component({
   selector: 'app-root',
@@ -48,25 +48,30 @@ export class AppComponent {
     //This shouldn't have any relation with the change of reference of this.items
   }
 
-  checkFirstLoad(data:Item[]):void{
-    if (this.firstLoad) {
-      const newItems:Item[] = [];
-      const items = [...data];
-      let time = 0;
-      items.forEach(item => {
-        setTimeout(()=>{
-          newItems.push(item);
-          this.items.set(newItems);
-        }, time += 250);
-      });
-      this.firstLoad = false;
-    } 
-    else {
-      this.items.set(data);
+  async checkFirstLoad(data:Promise<Item[]>):Promise<void>{
+    try {
+      const items = await data;
+      if (this.firstLoad) {
+        let time = 0;
+        const itemsStack:Item[] = [];
+        items.forEach(item => {
+          setTimeout(()=>{
+            itemsStack.push(item);
+            const newReference = [...itemsStack];
+            this.items.set(newReference);
+          }, time += 250);
+        });
+        this.firstLoad = false;
+      } 
+      else {
+        this.items.set(items);
+      }
+    }catch(error){
+      console.error("connection error");
     }
   }
 
-  refreshItems():void{
+  async refreshItems():Promise<void>{
     this.getItemsService.getItems().subscribe(items => {
       this.checkFirstLoad(items);
     });
@@ -91,7 +96,8 @@ export class AppComponent {
   ngOnInit(){
     this.refreshItems();
     setTimeout(()=>{
-      this.refreshItems(); //Added new item simulation refresh
-    },4000);
+      dummyDatabase('put', {id: 2,  content: "Items number 32", creationDate: "", modificationDate: ""});
+      this.refreshItems();
+    }, 3000);
   }
 }

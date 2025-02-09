@@ -28,14 +28,16 @@
 #header {
     background: #282728;
     display: flex;
+    position: relative;
     height: 60px;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
+    padding-left: 15px;
 }
 
     #add-button {
         box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.40);
-        margin-left: 15px;
+        margin: 0 15px 0 0;
         border: 1px solid #f8fafa;
         color: #f8fafa;
         color: #d5f7d0;
@@ -53,19 +55,25 @@
             font-family: Quicksand, monospace;
         }
 
-    #option {
+    .select-cancel-btn {
         border: 1px solid #f8fafa;
         color: #f8fafa;
         padding: 6px;
         box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.40);
         margin-right: 15px;
+        font-weight: 100;
+        font-size: 20px;
+        height: 40px;
+        width: 100px; 
+    }
+    #select-multiple-btn, #cancel-selection-btn {
         border-radius: 20px;
     }
 
-    #add-button, #option {
+    #add-button, #select-multiple-btn {
         transition: filter .3s ease;
     }
-    #add-button:hover, #option:hover {
+    #add-button:hover, #select-multiple-btn:hover {
         filter: brightness(60%);
     }
 

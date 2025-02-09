@@ -15,6 +15,14 @@ export class ItemComponent {
 
   hovered = false;
 
+  selected = false;
+
+  constructor(){
+    effect(()=>{
+      if (!this.multipleSelection?.()) this.selected = false;
+    });
+  }
+
   data = input.required<Item>();
 
   multipleSelection = input<boolean>();
@@ -22,6 +30,7 @@ export class ItemComponent {
   checkboxUpdate = output<ReactiveItem>();
 
   updateCheckbox = (state:boolean) => {
+    if (this.selected !== state) this.selected = state;
     this.checkboxUpdate.emit({ id: this.data().id, selected: state });
   }
 

@@ -1,9 +1,10 @@
 <header id="header">
   <button mat-button id="add-button">add</button> <!-- This should be a separated component -->
-  <button id="option" mat-mini-fab aria-label="Example icon button with a menu icon">
-      <mat-icon>
-        menu
-      </mat-icon>
+  <button *ngIf="!multipleSelection" (click)="multipleSelection = true" id="select-multiple-btn" class="select-cancel-btn" mat-mini-fab aria-label="Example icon button with a menu icon">
+    select
+  </button>
+  <button *ngIf="multipleSelection" id="cancel-selection-btn" (click)="multipleSelection = false" class="select-cancel-btn" mat-mini-fab>
+    cancel
   </button>
 </header>
 <div id="app-body">

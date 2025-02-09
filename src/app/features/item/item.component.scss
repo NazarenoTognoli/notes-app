@@ -34,25 +34,13 @@
         font-family: monospace;
         padding: 15px;
         justify-content: space-between;
+        background: #4f5052;
     }
-        .header__id {
-            font-size: 19px;
-        }
-        .header__del-btn {
-            background: #7f0418;
-            background: #f61700;
-            border: none;
-            padding: 3px 10px;
-            color: #7f0418;
-            color: #f8fafa;
-            border: 1px solid #7f0418;
-            display: none;
-        }
     .body {
         height: 100%;
         display: flex;
-        align-items: flex-end;
         background: #4f5052;
+        padding-top: 62px;
     }
     .body__content {
         font-size: 19px;
@@ -79,6 +67,7 @@
     height: 52px;
     width: 100%;
     display: flex;
+    background: rgba(0, 0, 0, .5);
 }
 mat-checkbox {
     margin: 15px;
