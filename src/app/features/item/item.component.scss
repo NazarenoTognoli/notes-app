@@ -26,26 +26,33 @@
     animation: fadeIn .18s ease-in forwards;
     opacity: 0;
 }
-    .header {
-        display: inherit;
-        align-items: center;
-        color: #f8fafa;
-        font-weight: 100;
-        font-family: monospace;
-        padding: 15px;
-        justify-content: space-between;
-        background: #4f5052;
-    }
     .body {
         height: 100%;
         display: flex;
         background: #4f5052;
-        padding-top: 62px;
+        padding: 0;
+        flex-direction: column;
     }
     .body__content {
         font-size: 19px;
         color: #f8fafa;
-        padding-bottom: 30px;
+        padding: 62px 5px 0 5px;
+        display: -webkit-box; 
+        -webkit-line-clamp: 3; /* Máximo 3 líneas */
+        -webkit-box-orient: vertical;
+        overflow: hidden; /* Oculta el contenido que sobrepase el ancho */
+        text-overflow: ellipsis; /* Agrega puntos suspensivos (...) */
+        flex-shrink: 1; /* Permite que el texto se reduzca si es necesario */
+    }
+    .creation-date {
+        margin: auto 0 10px 0;
+    }
+    .creation-date, .modification-date {
+        padding-left: 5px;
+        width: 80%;
+        background: #000;
+        color: #fff;
+        font-size: 13px;
     }
 
 .ih {

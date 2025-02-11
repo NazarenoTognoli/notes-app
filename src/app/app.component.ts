@@ -45,7 +45,7 @@ export class AppComponent {
       selected:false,
     }));
     this.reactiveItems.set([...synchronizedReactiveItems]);
-    //This shouldn't have any relation with the change of reference of this.items
+    //This shouldn't change the reference of this.items otherwise infinite loop
   }
 
   async checkFirstLoad(data:Promise<Item[]>):Promise<void>{
@@ -95,9 +95,5 @@ export class AppComponent {
 
   ngOnInit(){
     this.refreshItems();
-    setTimeout(()=>{
-      dummyDatabase('put', {id: 2,  content: "Items number 32", creationDate: "", modificationDate: ""});
-      this.refreshItems();
-    }, 3000);
   }
 }

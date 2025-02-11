@@ -39,7 +39,7 @@ export class GetItemsService {
 
   getItems(): Observable<Promise<Item[]>> { //Observable<> is a class that shapes return
     // Simulate a server delay of 1 second before returning the data
-    return of(dummyDatabase('get', { id: 0, content: '', creationDate: '', modificationDate: '' })); //Of creates the observer¿¿¿ //Pipe attaches a function to the return result
+    return of(dummyDatabase('get')); //Of creates the observer¿¿¿ //Pipe attaches a function to the return result
     //delay is an operator of rxjs which one integrates with pipe. 
   }
 }
