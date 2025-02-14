@@ -1,0 +1,7 @@
+<button mat-button id="add-button">add</button> <!-- This should be a separated component -->
+<button *ngIf="!itemsState.multipleSelection" (click)="itemsState.handleSelectButton(true)" id="select-multiple-btn" class="select-cancel-btn" mat-mini-fab aria-label="Example icon button with a menu icon">
+  select
+</button>
+<button *ngIf="itemsState.multipleSelection" id="cancel-selection-btn" (click)="itemsState.handleSelectButton(false)" class="select-cancel-btn" mat-mini-fab>
+  cancel
+</button>
