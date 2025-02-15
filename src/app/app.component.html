@@ -1,5 +1,5 @@
 <header app-header id="header">
 </header>
 <div id="app-body">
-  <app-item *ngFor="let item of items()" [data]="item" (checkboxUpdate)="handleCheckboxUpdate($event)" [multipleSelection]="multipleSelection"></app-item>
+  <app-item *ngFor="let item of items.items()" [data]="item" (checkboxUpdate)="itemsState.handleCheckboxUpdate($event)" [multipleSelection]="itemsState.multipleSelection"></app-item>
 </div>

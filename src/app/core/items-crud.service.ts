@@ -33,7 +33,7 @@ import { dummyDatabase, Item } from '@app/shared/models/item.model';
 @Injectable({
   providedIn: 'root',
 })
-export class GetItemsService {
+export class ItemsCrudService {
 
   constructor() {}
 
@@ -65,6 +65,3 @@ export class GetItemsService {
 //      //There is also .put, .post and .delete methods for handling server data. 
 //   }
 // }
-
-
-

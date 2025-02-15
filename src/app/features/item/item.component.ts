@@ -19,7 +19,7 @@ export class ItemComponent {
 
   constructor(){
     effect(()=>{
-      if (!this.multipleSelection?.()) this.selected = false;
+      if (!this.multipleSelection?.()) this.updateCheckbox(false);
     });
   }
 

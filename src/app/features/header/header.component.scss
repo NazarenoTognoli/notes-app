@@ -38,7 +38,7 @@
 #add-button, #select-multiple-btn {
     transition: filter .3s ease;
 }
-#add-button:hover, #select-multiple-btn:hover {
+#add-button:hover, #select-multiple-btn:hover, #cancel-selection-btn:hover {
     filter: brightness(60%);
     cursor:pointer; 
 }

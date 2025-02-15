@@ -1,6 +1,5 @@
 import { Injectable, signal, effect } from '@angular/core';
 //SERVICES
-import { GetItemsService } from '../core/get-items.service';
 import { ItemsService } from '@app/core/items.service';
 //MODELS
 import { Item, ReactiveItem } from '@app/shared/models/item.model';

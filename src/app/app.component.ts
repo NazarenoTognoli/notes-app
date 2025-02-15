@@ -6,7 +6,8 @@ import { RouterOutlet } from '@angular/router';
 import { of, from } from 'rxjs';
 import { concatMap, delay } from 'rxjs/operators';
 //SERVICES
-import {GetItemsService} from './core/get-items.service';
+import {ItemsService} from '@app/core/items.service';
+import {ItemsStateService} from '@app/core/items-state.service';
 //ANGULAR MATERIAL
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
@@ -32,70 +33,10 @@ import { Item, ReactiveItem, dummyDatabase } from '@app/shared/models/item.model
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  items = signal<Item[]>([]);
-  reactiveItems = signal<ReactiveItem[]>([]);
-  multipleSelection = false;
-  firstLoad = true;
 
-  constructor(private getItemsService: GetItemsService){
-    effect(()=> this.items().length > 0 ? this.syncReactiveItems() : undefined, {allowSignalWrites:true});
-  }
-
-  syncReactiveItems():void {
-    const synchronizedReactiveItems = this.items().map(item => ({
-      id: item.id,
-      selected:false,
-    }));
-    this.reactiveItems.set([...synchronizedReactiveItems]);
-    //This shouldn't change the reference of this.items otherwise infinite loop
-  }
-
-  async checkFirstLoad(data:Promise<Item[]>):Promise<void>{
-    try {
-      const items = await data;
-      if (this.firstLoad) {
-        let time = 0;
-        const itemsStack:Item[] = [];
-        items.forEach(item => {
-          setTimeout(()=>{
-            itemsStack.push(item);
-            const newReference = [...itemsStack];
-            this.items.set(newReference);
-          }, time += 250);
-        });
-        this.firstLoad = false;
-      } 
-      else {
-        this.items.set(items);
-      }
-    }catch(error){
-      console.error("connection error");
-    }
-  }
-
-  async refreshItems():Promise<void>{
-    this.getItemsService.getItems().subscribe(items => {
-      this.checkFirstLoad(items);
-    });
-  }
-
-  refreshReactiveItems(state:ReactiveItem):void{
-    const refreshedReactiveItems = this.reactiveItems().map(item => 
-      item.id === state.id ? {...item, selected:state.selected} : item
-    ); 
-    this.reactiveItems.set([...refreshedReactiveItems]);
-  }
-
-  checkMultipleSelection():void{
-    this.multipleSelection = this.reactiveItems().some(item => item.selected);
-  }
-
-  handleCheckboxUpdate(state:ReactiveItem):void{
-    this.refreshReactiveItems(state);
-    this.checkMultipleSelection();
-  }
+  constructor(public items: ItemsService, public itemsState: ItemsStateService){}
 
   ngOnInit(){
-    this.refreshItems();
+    this.items.refreshItems();
   }
 }
