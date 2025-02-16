@@ -12,7 +12,7 @@ import { Item, ReactiveItem } from '@app/shared/models/item.model';
 export class ItemsStateService {
 
   reactiveItems = signal<ReactiveItem[]>([]);
-  multipleSelection = false;
+  multipleSelection = signal<boolean>(false);
 
   constructor(private itemsService: ItemsService){
     effect(()=> this.itemsService.items().length > 0 ? this.syncReactiveItems() : undefined, {allowSignalWrites:true});
@@ -32,19 +32,14 @@ export class ItemsStateService {
       item.id === state.id ? { ...item, selected: state.selected } : item
     );
     this.reactiveItems.set([...refreshedReactiveItems]);
-    this.checkMultipleSelection();
-  }
-
-  checkMultipleSelection():void{
-    this.multipleSelection = this.reactiveItems().some(item => item.selected);
   }
 
   handleCheckboxUpdate(state:ReactiveItem):void{
     this.refreshReactiveItems(state);
-    this.checkMultipleSelection();
+    this.multipleSelection.set(this.reactiveItems().some(item => item.selected));
   }
 
   handleSelectButton(value:boolean):void{
-    this.multipleSelection = value;
+    this.multipleSelection.set(value);
   }
 }

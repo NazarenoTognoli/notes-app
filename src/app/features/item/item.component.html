@@ -6,7 +6,7 @@
     
     <div 
         class="mask" 
-        [ngClass]="{'mask-ih': multipleSelection() || hovered}">
+        [ngClass]="{'mask-ih': states.multipleSelection() || hovered}">
         <div class="mask__header">
             <mat-checkbox
                 [checked]="selected"
