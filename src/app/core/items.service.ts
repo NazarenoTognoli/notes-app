@@ -1,13 +1,15 @@
 import { Injectable, signal } from '@angular/core';
 import { ItemsCrudService } from '@app/core/items-crud.service';
 import { Item } from '@app/shared/models/item.model';
+import { ItemsStateService } from './items-state.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemsService {
   items = signal<Item[]>([]);
-  firstLoad = true;
+  firstLoad = signal<boolean>(true);
+  idleItem:Item = this.items()[0];
 
   constructor(private itemsCrud: ItemsCrudService) { }
 
@@ -21,14 +23,14 @@ export class ItemsService {
         this.items.set(newReference);
       }, time += 250);
     });
-    this.firstLoad = false;
+    this.firstLoad.set(false);
   }
 
   async refreshItems():Promise<void>{
     this.itemsCrud.getItems().subscribe(async items => {
       try {
         const data = await items;
-        this.firstLoad ? this.firstLoadLogic(data) : this.items.set(data);
+        this.firstLoad() ? this.firstLoadLogic(data) : this.items.set(data);
       }catch(error){
         console.error('Connection error ' + error);
       }

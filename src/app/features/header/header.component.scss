@@ -1,44 +1,52 @@
-#add-button {
-    box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.40);
-    margin: 0 15px 0 0;
+.btn-styles {
     border: 1px solid #f8fafa;
     color: #f8fafa;
-    color: #d5f7d0;
-    border-color: #d5f7d0;
-    font-weight: 100;
-    font-size: 20px;
-    height: 40px;
-    width: 80px; 
-    border-radius: 20px;
-    background: #282728;
-}
-    #add-button-text {
-        font-size: 25px;
-        padding-left: 10px;
-        color: #f8fafa;
-        font-family: Quicksand, monospace;
-    }
-
-.select-cancel-btn {
-    border: 1px solid #f8fafa;
-    color: #f8fafa;
-    padding: 6px;
+    padding: 6px 22px 6px 22px;
     box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.40);
     margin-right: 15px;
     font-weight: 100;
     font-size: 20px;
     height: 40px;
-    width: 100px;
-    background: #282728; 
+    background: #282728;
+    cursor:pointer; 
 }
-#select-multiple-btn, #cancel-selection-btn {
-    border-radius: 20px;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-#add-button, #select-multiple-btn {
-    transition: filter .3s ease;
+#select-multiple-btn,
+#cancel-selection-btn,
+#cancel-editor-btn,
+#confirm-editor-btn,
+#add-button,
+#del-button {
+  border-radius: 20px;
+  transition: filter 0.3s ease;
+  animation: fadeIn 0.3s ease forwards;
 }
-#add-button:hover, #select-multiple-btn:hover, #cancel-selection-btn:hover {
+
+#confirm-editor-btn, #add-button {
+    border-color: #d5f7d0;
+    color: #d5f7d0;
+}
+#select-multiple-btn {
+    border-color: #d0d2f7;
+    color: #d0d2f7;
+}
+#del-button, #cancel-editor-btn {
+    color: #f7d0d0;
+    border-color: #f7d0d0;
+}
+#add-button:hover, 
+#select-multiple-btn:hover, 
+#cancel-selection-btn:hover,
+#cancel-editor-btn:hover, 
+#confirm-editor-btn:hover,
+#del-button:hover {
     filter: brightness(60%);
-    cursor:pointer; 
 }

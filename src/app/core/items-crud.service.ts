@@ -42,6 +42,11 @@ export class ItemsCrudService {
     return of(dummyDatabase('get')); //Of creates the observer¿¿¿ //Pipe attaches a function to the return result
     //delay is an operator of rxjs which one integrates with pipe. 
   }
+
+  putItem(data:Item){
+    dummyDatabase('put', data);
+  }
+  
 }
 
 //==============================REAL EXAMPLE============================================

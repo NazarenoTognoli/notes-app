@@ -15,6 +15,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 //COMPONENTS
 import { ItemComponent} from '@app/features/item/item.component';
 import { HeaderComponent } from '@app/features/header/header.component';
+import { EditorComponent } from './features/editor/editor.component';
 //MODELS
 import { Item, ReactiveItem, dummyDatabase } from '@app/shared/models/item.model';
 
@@ -28,7 +29,8 @@ import { Item, ReactiveItem, dummyDatabase } from '@app/shared/models/item.model
     ItemComponent, 
     CommonModule, 
     MatGridListModule,
-    HeaderComponent],
+    HeaderComponent,
+    EditorComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

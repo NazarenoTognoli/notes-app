@@ -1,5 +1,8 @@
 <header app-header id="header">
 </header>
 <div id="app-body">
-  <app-item *ngFor="let item of items.items()" [data]="item"></app-item>
+  <div class="items-container" [ngClass]="{ 'items-container-while-editing': itemsState.editor() }">
+    <app-item *ngFor="let item of items.items()" [data]="item"></app-item>
+  </div>
+  <app-editor *ngIf="itemsState.editor()"></app-editor>  
 </div>

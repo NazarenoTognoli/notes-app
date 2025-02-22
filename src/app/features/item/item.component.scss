@@ -76,6 +76,16 @@
     display: flex;
     background: rgba(0, 0, 0, .5);
 }
+.mask__header-editing {
+    display: none;
+}
+.mask__item-trigger {
+    width: 100%;
+    height: calc(100% - 52px);
+}
+.mask__item-trigger-editing {
+    height: 100%;
+}
 mat-checkbox {
     margin: 15px;
     margin-left: auto;
@@ -83,10 +93,6 @@ mat-checkbox {
 }
 mat-checkbox:hover {
     color: #ffe1b0;
-}
-.mask__item-trigger {
-    width: 100%;
-    height: calc(100% - 52px);
 }
 .mask__item-trigger:hover {
     cursor: pointer;

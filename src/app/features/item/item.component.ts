@@ -5,9 +5,10 @@ import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 //MODELS
-import { Item, ReactiveItem } from '@app/shared/models/item.model';
+import { Item, dummyDatabase } from '@app/shared/models/item.model';
 //SERVICES
 import { ItemsStateService } from '@app/core/items-state.service';
+import { ItemsService } from '@app/core/items.service';
 
 @Component({
   selector: 'app-item',
@@ -26,13 +27,17 @@ export class ItemComponent {
   
   constructor(public states:ItemsStateService){
     effect(()=>{
-      if (!this.states.multipleSelection()) this.updateCheckbox(false);
-    });
+      if (!this.states.multipleSelection()) this.updateCheckbox(false, true);
+    }, {allowSignalWrites:true});
   }
 
-  updateCheckbox(state:boolean) {
+  updateCheckbox(state:boolean, loop:boolean = false) {
     if (this.selected !== state) this.selected = state;
-    this.states.handleCheckboxUpdate({ id: this.data().id, selected: state })
+    this.states.handleCheckboxUpdate({ id: this.data().id, selected: state }, loop);
+  }
+
+  handleEditorTrigger(){
+    if(!this.states.multipleSelection() && !this.states.editor()) this.states.handleEditor(this.data());
   }
 
 }
