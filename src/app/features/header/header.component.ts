@@ -29,4 +29,25 @@ export class HeaderComponent {
     this.itemsState.creation.set(true);
   }
 
+  async handleDelButton():Promise<void>{
+    let ids:number[] = [];
+    for (let item of this.itemsSync.reactiveItems) {
+      if (item.selected) ids.push(item.id);
+    }
+    this.itemsState.multipleSelection.set(false);
+    try{
+      ids.forEach(async id=>{
+        const index = this.itemsSync.items().findIndex(item => item.id === id);
+        const itemToDelete = this.itemsSync.items()[index];
+        
+        await this.itemsSync.deleteItem(itemToDelete);
+        await this.itemsSync.refreshItems();
+      });
+    }
+    catch(error){
+      console.error("connection error " + error);
+    }
+
+  }
+
 }

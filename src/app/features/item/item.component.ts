@@ -40,6 +40,8 @@ export class ItemComponent {
     this.itemsSync.refreshReactiveItems({ id: this.data().id, selected: state });
     //Se evita un loop infinito por el effect
     if (!loop) this.itemsState.multipleSelection.set(this.itemsSync.reactiveItems.some(item => item.selected));
+
+    this.itemsState.delButtonEnabled = this.itemsSync.reactiveItems.some(item => item.selected);
   }
 
   handleEditor(): void {

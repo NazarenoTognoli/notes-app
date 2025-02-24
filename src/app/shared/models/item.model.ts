@@ -11,6 +11,10 @@ export interface ReactiveItem {
 }
 const date = new Date().toString();
 
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+}
+
 export const data:Item[] = [
   { id: 1, content: "Items number ", creationDate: date, modificationDate: date },
   { id: 2, content: "Items number ", creationDate: date, modificationDate: date },
@@ -45,7 +49,6 @@ export function dummyDatabase(operation: Operations, newReference: Item = { id: 
           }
           break;
       }
-
       resolve(data);
     }, 500); // Simula medio segundo de espera
   });

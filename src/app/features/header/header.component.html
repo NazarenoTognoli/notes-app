@@ -10,8 +10,10 @@
 
 <button 
   *ngIf="!itemsState.editor() && itemsState.multipleSelection() && !itemsState.creation()" 
+  (click)="handleDelButton()"
   id="del-button" 
-  class="btn-styles"
+  class="btn-styles del-button"
+  [ngClass]="{'del-button-enabled':itemsState.delButtonEnabled}"
   mat-button>
   del
 </button>

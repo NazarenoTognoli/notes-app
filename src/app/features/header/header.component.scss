@@ -38,7 +38,20 @@
     border-color: #d0d2f7;
     color: #d0d2f7;
 }
-#del-button, #cancel-editor-btn {
+.del-button {
+    cursor: default;
+    color: #777;
+    border-color: #777;
+    pointer-events: none;
+    box-shadow: none;
+    user-select: none;
+}
+.del-button-enabled {
+    pointer-events: auto;
+    box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.40);
+    cursor: pointer;
+}
+.del-button-enabled, #cancel-editor-btn {
     color: #f7d0d0;
     border-color: #f7d0d0;
 }

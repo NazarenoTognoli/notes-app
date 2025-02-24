@@ -30,6 +30,10 @@ export class ItemsSyncService {
     return dummyDatabase('post', data);
   }
 
+  deleteItem(data:Item){
+    return dummyDatabase('delete', data);
+  }
+
   firstLoadLogic(data:Item[]):void{
     let time = 0;
     const itemsStack:Item[] = [];

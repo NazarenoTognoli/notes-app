@@ -13,7 +13,7 @@ export class ItemsStateService {
 
   multipleSelection = signal<boolean>(false);
   
-  delButtonEnabled = signal<boolean>(false);
+  delButtonEnabled:boolean = false;
   
   editor = signal<boolean>(false);
   
