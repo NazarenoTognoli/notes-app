@@ -46,6 +46,10 @@ export class ItemsCrudService {
   putItem(data:Item){
     dummyDatabase('put', data);
   }
+
+  postItem(data:Item){
+    dummyDatabase('post', data);
+  }
   
 }
 

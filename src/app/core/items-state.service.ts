@@ -12,10 +12,10 @@ import { Item, ReactiveItem } from '@app/shared/models/item.model';
 })
 export class ItemsStateService {
 
-  reactiveItems: ReactiveItem[] = [];  // 'reactiveItems' ahora es una propiedad normal (array de objetos)
-  multipleSelection = signal<boolean>(false);  // Señal para la selección múltiple
-  editor = signal<boolean>(false);  // Señal para el estado del editor
-  editorData;// Señal para los datos del editor
+  reactiveItems: ReactiveItem[] = [];
+  multipleSelection = signal<boolean>(false);
+  editor = signal<boolean>(false);
+  editorData;
 
   constructor(private itemsService: ItemsService, private itemsCrud: ItemsCrudService){
     this.editorData = signal<Item>(this.itemsService.items()[0]);
