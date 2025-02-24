@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, effect } from '@angular/core';
 import { ItemsStateService } from '@app/core/items-state.service';
 import { ItemsSyncService } from '@app/core/items-sync.service';
 import { generateId } from '@app/shared/models/item.model';
@@ -12,29 +12,39 @@ import { generateId } from '@app/shared/models/item.model';
 })
 export class EditorComponent implements AfterViewInit {
   @ViewChild('editor') editorElement!: ElementRef<HTMLTextAreaElement>;
+  viewInit = false;
 
-  constructor(public itemsState:ItemsStateService, private itemsSync:ItemsSyncService){}
+  constructor(public itemsState:ItemsStateService, private itemsSync:ItemsSyncService){
+    effect(()=>{
+      if (this.viewInit && (this.itemsState.editor() || this.itemsState.creation())){ this.editorElement.nativeElement.value = this.previousData() }
+    });
+  }
 
   previousData():string {
     if(this.itemsState.editor()){
       return this.itemsState.editorData().content;
-    } else {
+    }
+    else if (this.itemsState.creation() && this.itemsState.creationData()){
+      return this.itemsState.creationData().content;
+    }
+    else {
       return "";
     }
   }
 
   handleEdition(contentValue:string){
-    const data = {...this.itemsState.editorData(), content:contentValue, modificationDate:new Date().toString()};
-    this.itemsState.editorData.set(data);
+    const data = () => ({...this.itemsState.editorData(), content:contentValue, modificationDate:new Date().toString()});
+    this.itemsState.editorData.set(data());
   }
 
   handleCreation(contentValue:string){
     const date = new Date().toString();
-    const data = {id:generateId(), modificationDate: date, creationDate: date, content:contentValue};
-    this.itemsState.creationData.set(data);
+    const data = () => ({id:generateId(), modificationDate: date, creationDate: date, content:contentValue});
+    this.itemsState.creationData.set(data());
   }
 
   ngAfterViewInit() {
+    this.viewInit = true;
     this.editorElement.nativeElement.value = this.previousData();
     this.editorElement.nativeElement.addEventListener('input', (event:Event)=>{
       const contentValue = (event.target as HTMLTextAreaElement).value;

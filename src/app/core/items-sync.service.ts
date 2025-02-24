@@ -1,12 +1,15 @@
 import { Injectable, signal } from '@angular/core';
 import { Item, ReactiveItem, dummyDatabase } from '@app/shared/models/item.model';
 import { Observable, of } from 'rxjs';
-import { ItemsStateService } from './items-state.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemsSyncService {
+
+  filteredItems:Item[] = [];
+
+  searchTerm: string = '';
 
   reactiveItems: ReactiveItem[] = [];
 
@@ -55,6 +58,10 @@ export class ItemsSyncService {
       try {
         const data = await items;
         this.firstLoad() ? this.firstLoadLogic(data) : this.items.set(data);
+        //En caso de que haya items filtrandose sincronizar
+        if (this.searchTerm){
+          this.syncFilteredItems();
+        }
       }catch(error){
         console.error('Connection error ' + error);
       }
@@ -72,6 +79,12 @@ export class ItemsSyncService {
   refreshReactiveItems(state: ReactiveItem): void {
     this.reactiveItems = this.reactiveItems.map(item =>
       item.id === state.id ? { ...item, selected: state.selected } : item
+    );
+  }
+
+  syncFilteredItems() {
+    this.filteredItems = this.items().filter(item =>
+      item.content.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 

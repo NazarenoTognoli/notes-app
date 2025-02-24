@@ -13,11 +13,6 @@ import { Item } from '@app/shared/models/item.model';
 })
 export class SearchComponent {
   
-  constructor(public itemsState:ItemsStateService, public itemsSync:ItemsSyncService){}
+  constructor(public itemsSync:ItemsSyncService){}
 
-  filterData() {
-    this.itemsState.filteredItems = this.itemsSync.items().filter(item =>
-      item.content.toLowerCase().includes(this.itemsState.searchTerm.toLowerCase())
-    );
-  }
 }

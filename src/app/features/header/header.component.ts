@@ -29,6 +29,7 @@ export class HeaderComponent {
 
   handleAddButton():void{
     this.itemsState.creation.set(true);
+    const data = this.itemsState.creationData();
   }
 
   async handleDelButton():Promise<void>{

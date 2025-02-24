@@ -45,7 +45,9 @@ export class ItemComponent {
   }
 
   handleEditor(): void {
-    if(!this.itemsState.multipleSelection() && !this.itemsState.editor()) {
+    if(!this.itemsState.multipleSelection()) {
+      if (this.itemsState.editor()) this.itemsState.editor.set(false);
+      if (this.itemsState.creation()) this.itemsState.creation.set(false);
       this.itemsState.editorData.set(this.data());
       this.itemsState.editor.set(true);
     }

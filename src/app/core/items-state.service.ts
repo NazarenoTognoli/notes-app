@@ -23,10 +23,6 @@ export class ItemsStateService {
   
   editorData;
 
-  filteredItems:Item[] = [];
-
-  searchTerm: string = '';
-
   constructor(private itemsSync: ItemsSyncService){
     this.editorData = signal<Item>(this.itemsSync.items()[0]);
     this.creationData = signal<Item>(this.itemsSync.items()[0]);
@@ -41,6 +37,7 @@ export class ItemsStateService {
       if (this.creation()) {
         this.creation.set(false);
         await this.itemsSync.postItem(this.creationData());
+        this.creationData.set({...this.creationData(), content:""});
       } 
 
       // Asegura sincronización
