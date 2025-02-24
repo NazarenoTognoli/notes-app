@@ -27,22 +27,23 @@ export class ItemComponent {
   
   constructor(public itemsState:ItemsStateService, public itemsSync:ItemsSyncService){
     effect(()=>{
-      if (!this.itemsState.multipleSelection()) this.handleCheckbox(false, true);
+      if (!this.itemsState.multipleSelection()) this.handleCheckbox({state:false, loop:true});
     }, {allowSignalWrites:true});
   }
 
-  handleCheckbox(state: boolean, loop:boolean = false, firstLoad:boolean = false): void { //TODO: Cambiar parametros a destructuración de objetos
+  handleCheckbox({ state, loop = false }: { state: boolean; loop?: boolean }): void {
     if (this.selected !== state) this.selected = state;
 
-    //solo es necesario ejecutar cuando son añadidos nuevos items porque el effect que sincronizaba comenzo a fallar
-    firstLoad ? this.itemsSync.syncReactiveItems() : undefined; 
-
     this.itemsSync.refreshReactiveItems({ id: this.data().id, selected: state });
-    //Se evita un loop infinito por el effect
-    if (!loop) this.itemsState.multipleSelection.set(this.itemsSync.reactiveItems.some(item => item.selected));
+
+    // Se evita un loop infinito por el effect
+    if (!loop) {
+      this.itemsState.multipleSelection.set(this.itemsSync.reactiveItems.some(item => item.selected));
+    } 
 
     this.itemsState.delButtonEnabled = this.itemsSync.reactiveItems.some(item => item.selected);
   }
+
 
   handleEditor(): void {
     if(!this.itemsState.multipleSelection()) {
@@ -54,7 +55,8 @@ export class ItemComponent {
   }
 
   ngAfterViewInit(){
-    this.handleCheckbox(false, false, true);
+    // Solo es necesario ejecutar cuando son añadidos para sincronizar estados
+    this.itemsSync.syncReactiveItems();
   }
 
 }

@@ -10,7 +10,7 @@
         <div class="mask__header" [ngClass]="{'mask__header-editing': itemsState.editor() || itemsState.creation()}">
             <mat-checkbox
                 [checked]="selected"
-                (change)="handleCheckbox($event.checked)"
+                (change)="handleCheckbox({state:$event.checked})"
                 *ngIf="!itemsState.editor() || !itemsState.creation()">
             </mat-checkbox>
         </div>
