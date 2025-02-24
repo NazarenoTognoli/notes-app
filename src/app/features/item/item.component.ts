@@ -1,5 +1,5 @@
 //NG
-import { Component, input, output, computed, signal, OnInit, effect } from '@angular/core';
+import { Component, input, output, computed, signal, OnInit, effect, AfterViewInit } from '@angular/core';
 //LLIBS
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
@@ -31,13 +31,17 @@ export class ItemComponent {
     }, {allowSignalWrites:true});
   }
 
-  updateCheckbox(state:boolean, loop:boolean = false) {
+  updateCheckbox(state:boolean, loop:boolean = false, firstLoad:boolean = false) {
     if (this.selected !== state) this.selected = state;
-    this.states.handleCheckboxUpdate({ id: this.data().id, selected: state }, loop);
+    this.states.handleCheckboxUpdate({ id: this.data().id, selected: state }, loop, firstLoad);
   }
 
   handleEditorTrigger(){
     if(!this.states.multipleSelection() && !this.states.editor()) this.states.handleEditor(this.data());
+  }
+
+  ngAfterViewInit(){
+    this.updateCheckbox(false, false, true);
   }
 
 }

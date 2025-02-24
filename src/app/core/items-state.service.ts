@@ -15,15 +15,13 @@ export class ItemsStateService {
   reactiveItems: ReactiveItem[] = [];
   multipleSelection = signal<boolean>(false);
   editor = signal<boolean>(false);
+  creation = signal<boolean>(false);
+  creationData;
   editorData;
 
   constructor(private itemsService: ItemsService, private itemsCrud: ItemsCrudService){
     this.editorData = signal<Item>(this.itemsService.items()[0]);
-    
-    effect(() => {
-      this.itemsService.items().length > 0 ? this.syncReactiveItems() : undefined;
-    }, { allowSignalWrites: true });
-  
+    this.creationData = signal<Item>(this.itemsService.items()[0]);
   }
 
   syncReactiveItems(): void {
@@ -31,7 +29,7 @@ export class ItemsStateService {
       id: item.id,
       selected: false,
     }));
-    this.reactiveItems = [...synchronizedReactiveItems];  // Asignamos el array a la propiedad 'reactiveItems'
+    this.reactiveItems = [...synchronizedReactiveItems];
   }
 
   refreshReactiveItems(state: ReactiveItem): void {
@@ -40,36 +38,55 @@ export class ItemsStateService {
     );
   }
 
-  handleCheckboxUpdate(state: ReactiveItem, loop:boolean): void {
+  handleCheckboxUpdate(state: ReactiveItem, loop:boolean, firstLoad:boolean): void { //TODO: Cambiar parametros a destructuración de objetos
+    //solo es necesario ejecutar cuando son añadidos nuevos items porque el effect que sincronizaba comenzo a fallar
+    firstLoad ? this.syncReactiveItems() : undefined; 
+    console.clear();
+    console.log(this.itemsService.items());
+    console.log(this.reactiveItems);
+
     this.refreshReactiveItems(state);
-    if (!loop) this.multipleSelection.set(this.reactiveItems.some(item => item.selected));  // Usamos la señal para actualizar el estado de selección
+    //Se evita un loop infinito por el effect ubicado en item.component
+    if (!loop) this.multipleSelection.set(this.reactiveItems.some(item => item.selected));
   }
 
   handleSelectButton(value: boolean): void {
-    this.multipleSelection.set(value);  // Actualiza la señal de selección múltiple
+    this.multipleSelection.set(value);
   }
 
   handleEditor(itemData: Item): void {
-    this.editorData.set(itemData);  // Establece los datos del editor a través de la señal
-    this.editor.set(true);  // Activa el editor
+    this.editorData.set(itemData);
+    this.editor.set(true);
   }
 
   handleCancelEditor(): void {
-    this.editor.set(false);  // Desactiva el editor
+    //Evitamos actualizaciones inecesarias para evitar bugs y menor rendimiento e ihabilita
+    this.editor() ? this.editor.set(false) : undefined;
+    this.creation() ? this.creation.set(false) : undefined;
   }
 
-  handleConfirmEditor(): void {
+  async handleConfirmEditor(): Promise<void> {
+    try {
+      if (this.editor()) {
+        this.handleCancelEditor();
+        await this.itemsCrud.putItem(this.editorData()); // Espera a que termine la actualización
+      }
+      if (this.creation()) {
+        this.handleCancelEditor();
+        await this.itemsCrud.postItem(this.creationData()); // Espera a que termine la creación
+      } 
+
+      // Ahora sí, refresca los ítems con datos actualizados
+      await this.itemsService.refreshItems(); 
+
+    } catch (error) {
+      console.error("Error en la actualización:", error);
+    }
+  }
+
+  handleAddButton():void{
     this.editor.set(false);
-    this.itemsCrud.putItem(this.editorData());
-    this.itemsService.refreshItems();
+    this.creation.set(true);
   }
-
-  //Entonces, necesito los datos del item que es seleccionado y que se pasen al EditorComponent
-  //El editor compoent muestra esos datos
-  //La edicción de los demas items debe ser de forma segura inhibida para evitar bugs
-  //Cambiar los botones de add y select por confirm y cancel
-  //El usuario edita los datos del item y hace click in confirm o cancel, si es cancel se revierten los procesos
-  //Si es confirm entonces se arma un nuevo esquema de datos y se envia como solicitud a dummyDatabase
-  //Se hace un refresh del servidor
 
 }

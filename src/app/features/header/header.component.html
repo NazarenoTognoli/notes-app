@@ -1,16 +1,53 @@
 
-<button *ngIf="!itemsState.editor() && !itemsState.multipleSelection()" mat-button id="add-button" class="btn-styles">add</button>
-<button *ngIf="!itemsState.editor() && itemsState.multipleSelection()" mat-button id="del-button" class="btn-styles">del</button>
-<button (click)="itemsState.handleConfirmEditor()" *ngIf="itemsState.editor()" id="confirm-editor-btn" class="btn-styles" mat-mini-fab>
+<button 
+  *ngIf="!itemsState.editor() && !itemsState.multipleSelection() && !itemsState.creation()"
+  (click)="itemsState.handleAddButton()"
+  id="add-button" 
+  class="btn-styles"
+  mat-button>
+  add
+</button>
+
+<button 
+  *ngIf="!itemsState.editor() && itemsState.multipleSelection() && !itemsState.creation()" 
+  id="del-button" 
+  class="btn-styles"
+  mat-button>
+  del
+</button>
+
+<button 
+  *ngIf="(itemsState.editor() || itemsState.creation()) && !itemsState.multipleSelection()" 
+  (click)="itemsState.handleConfirmEditor()"
+  id="confirm-editor-btn"
+  class="btn-styles" 
+  mat-button>
   confirm
 </button>
 
-<button *ngIf="!itemsState.multipleSelection() && !itemsState.editor()" (click)="itemsState.handleSelectButton(true)" id="select-multiple-btn" class="btn-styles" mat-mini-fab aria-label="Example icon button with a menu icon">
+<button 
+  *ngIf="!itemsState.multipleSelection() && !itemsState.editor() && !itemsState.creation()" 
+  (click)="itemsState.handleSelectButton(true)" 
+  id="select-multiple-btn" 
+  class="btn-styles" 
+  mat-button>
   select
 </button>
-<button *ngIf="itemsState.multipleSelection() && !itemsState.editor()" id="cancel-selection-btn" (click)="itemsState.handleSelectButton(false)" class="btn-styles" mat-mini-fab>
+
+<button 
+  *ngIf="itemsState.multipleSelection() && !itemsState.editor() && !itemsState.creation()" 
+  (click)="itemsState.handleSelectButton(false)" 
+  id="cancel-selection-btn" 
+  class="btn-styles" 
+  mat-button>
   cancel
 </button>
-<button *ngIf="itemsState.editor()" id="cancel-editor-btn" class="btn-styles" mat-mini-fab (click)="itemsState.handleCancelEditor()">
+
+<button 
+  *ngIf="(itemsState.editor() || itemsState.creation()) && !itemsState.multipleSelection()" 
+  (click)="itemsState.handleCancelEditor()"
+  id="cancel-editor-btn" 
+  class="btn-styles" 
+  mat-mini-fab>
   cancel
 </button>

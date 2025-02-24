@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { ItemsStateService } from '@app/core/items-state.service';
+import { ItemsService } from '@app/core/items.service';
 
 @Component({
   selector: 'app-editor',
@@ -11,18 +12,33 @@ import { ItemsStateService } from '@app/core/items-state.service';
 export class EditorComponent implements AfterViewInit {
   @ViewChild('editor') editorElement!: ElementRef<HTMLTextAreaElement>;
 
-  constructor(public itemsState:ItemsStateService){}
+  constructor(public itemsState:ItemsStateService, private itemsService:ItemsService){}
 
   previousData():string {
-    return this.itemsState.editorData().content;
+    if(this.itemsState.editor()){
+      return this.itemsState.editorData().content;
+    } else {
+      return "";
+    }
+  }
+
+  handleEdition(contentValue:string){
+    const data = {...this.itemsState.editorData(), content:contentValue, modificationDate:new Date().toString()};
+    this.itemsState.editorData.set(data);
+  }
+  handleCreation(contentValue:string){
+    let newId = () => this.itemsService.items().length + 1;
+    const date = new Date().toString();
+    const data = {id:newId(), modificationDate: date, creationDate: date, content:contentValue};
+    this.itemsState.creationData.set(data);
   }
 
   ngAfterViewInit() {
     this.editorElement.nativeElement.value = this.previousData();
     this.editorElement.nativeElement.addEventListener('input', (event:Event)=>{
       const contentValue = (event.target as HTMLTextAreaElement).value;
-      const data = {...this.itemsState.editorData(), content:contentValue, modificationDate:new Date().toString()};
-      this.itemsState.editorData.set(data);
+      this.itemsState.editor() ? this.handleEdition(contentValue) : undefined;
+      this.itemsState.creation() ? this.handleCreation(contentValue) : undefined;
     });
     this.editorElement.nativeElement.focus();
   }

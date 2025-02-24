@@ -12,11 +12,11 @@ export interface ReactiveItem {
 const date = new Date().toString();
 
 export const data:Item[] = [
-  { id: 1, content: "Items number 1", creationDate: date, modificationDate: date },
-  { id: 2, content: "Items number 2", creationDate: date, modificationDate: date },
-  { id: 3, content: "Items number 3", creationDate: date, modificationDate: date },
-  { id: 4, content: "Items number 4", creationDate: date, modificationDate: date },
-  { id: 5, content: "Items number 5", creationDate: date, modificationDate: date },
+  { id: 1, content: "Items number ", creationDate: date, modificationDate: date },
+  { id: 2, content: "Items number ", creationDate: date, modificationDate: date },
+  { id: 3, content: "Items number ", creationDate: date, modificationDate: date },
+  { id: 4, content: "Items number ", creationDate: date, modificationDate: date },
+  { id: 5, content: "Items number ", creationDate: date, modificationDate: date },
 ];
 
 type Operations = 'delete' | 'post' | 'put' | 'get';
