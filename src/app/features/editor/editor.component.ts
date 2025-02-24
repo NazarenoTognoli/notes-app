@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { ItemsStateService } from '@app/core/items-state.service';
 import { ItemsSyncService } from '@app/core/items-sync.service';
+import { generateId } from '@app/shared/models/item.model';
 
 @Component({
   selector: 'app-editor',
@@ -28,9 +29,8 @@ export class EditorComponent implements AfterViewInit {
   }
 
   handleCreation(contentValue:string){
-    let newId = () => this.itemsSync.items().length + 1;
     const date = new Date().toString();
-    const data = {id:newId(), modificationDate: date, creationDate: date, content:contentValue};
+    const data = {id:generateId(), modificationDate: date, creationDate: date, content:contentValue};
     this.itemsState.creationData.set(data);
   }
 

@@ -34,6 +34,7 @@
         background: #4f5052;
         padding: 0;
         flex-direction: column;
+        box-sizing: border-box;
     }
     .body__content {
         font-size: 19px;
@@ -45,6 +46,8 @@
         overflow: hidden; /* Oculta el contenido que sobrepase el ancho */
         text-overflow: ellipsis; /* Agrega puntos suspensivos (...) */
         flex-shrink: 1; /* Permite que el texto se reduzca si es necesario */
+        box-sizing: border-box;
+        word-break: break-word;
     }
     .creation-date {
         margin: auto 0 10px 0;

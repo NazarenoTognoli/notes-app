@@ -30,7 +30,7 @@ export class HeaderComponent {
   }
 
   async handleDelButton():Promise<void>{
-    let ids:number[] = [];
+    let ids:string[] = [];
     for (let item of this.itemsSync.reactiveItems) {
       if (item.selected) ids.push(item.id);
     }
