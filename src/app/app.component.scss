@@ -42,7 +42,29 @@
     overflow-y: auto;
     gap: 15px;
     padding: 15px;
+    padding: 15px 12px 15px 15px;
+    margin-right: 3px;
     box-sizing: border-box;
+}
+::-webkit-scrollbar {
+  width: 6px;  /* Ancho de la barra vertical */
+  height: 6px; /* Altura de la barra horizontal (para scroll lateral) */
+}
+
+/* Color de fondo de la scrollbar (track) */
+::-webkit-scrollbar-track {
+  background: transparent; /* Hace que se vea más limpia */
+}
+
+/* Color y diseño de la barra de desplazamiento */
+::-webkit-scrollbar-thumb {
+  background: #999;  /* Color del scrollbar */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Cambia el color al pasar el mouse */
+::-webkit-scrollbar-thumb:hover {
+  background: #666; /* Oscurecer para mejor feedback */
 }
 .items-container-while-editing {
     width: 60%;

@@ -10,17 +10,43 @@ div {
     width: 100%;
     height: 100%;
     background: #282728;
+    background: #202020;
     display: inherit;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding-right: 3px;
 }
+/* Ocultar la scrollbar en general (opcional) */
+::-webkit-scrollbar {
+  width: 6px;  /* Ancho de la barra vertical */
+  height: 6px; /* Altura de la barra horizontal (para scroll lateral) */
+  margin-right: 2px;
+}
+
+/* Color de fondo de la scrollbar (track) */
+::-webkit-scrollbar-track {
+  background: transparent; /* Hace que se vea más limpia */
+}
+
+/* Color y diseño de la barra de desplazamiento */
+::-webkit-scrollbar-thumb {
+  background: #999;  /* Color del scrollbar */
+  border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Cambia el color al pasar el mouse */
+::-webkit-scrollbar-thumb:hover {
+  background: #666; /* Oscurecer para mejor feedback */
+}
+
 textarea {
     resize: none;
     width: 100%;
     height: 95%;
     font-size: 17px;
     color: #FFF;
-    background: #4f5052;
+    background: #282728;
+    background: #202020;
     outline: none;
     border: none;
     //border-radius: 15px;
