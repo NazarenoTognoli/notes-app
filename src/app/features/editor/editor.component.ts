@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { ItemsStateService } from '@app/core/items-state.service';
-import { ItemsService } from '@app/core/items.service';
+import { ItemsSyncService } from '@app/core/items-sync.service';
 
 @Component({
   selector: 'app-editor',
@@ -12,7 +12,7 @@ import { ItemsService } from '@app/core/items.service';
 export class EditorComponent implements AfterViewInit {
   @ViewChild('editor') editorElement!: ElementRef<HTMLTextAreaElement>;
 
-  constructor(public itemsState:ItemsStateService, private itemsService:ItemsService){}
+  constructor(public itemsState:ItemsStateService, private itemsSync:ItemsSyncService){}
 
   previousData():string {
     if(this.itemsState.editor()){
@@ -26,8 +26,9 @@ export class EditorComponent implements AfterViewInit {
     const data = {...this.itemsState.editorData(), content:contentValue, modificationDate:new Date().toString()};
     this.itemsState.editorData.set(data);
   }
+
   handleCreation(contentValue:string){
-    let newId = () => this.itemsService.items().length + 1;
+    let newId = () => this.itemsSync.items().length + 1;
     const date = new Date().toString();
     const data = {id:newId(), modificationDate: date, creationDate: date, content:contentValue};
     this.itemsState.creationData.set(data);

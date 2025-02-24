@@ -6,8 +6,8 @@ import { RouterOutlet } from '@angular/router';
 import { of, from } from 'rxjs';
 import { concatMap, delay } from 'rxjs/operators';
 //SERVICES
-import {ItemsService} from '@app/core/items.service';
-import {ItemsStateService} from '@app/core/items-state.service';
+import { ItemsSyncService } from './core/items-sync.service';
+import { ItemsStateService } from '@app/core/items-state.service';
 //ANGULAR MATERIAL
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
@@ -36,9 +36,9 @@ import { Item, ReactiveItem, dummyDatabase } from '@app/shared/models/item.model
 })
 export class AppComponent {
 
-  constructor(public items: ItemsService, public itemsState: ItemsStateService){}
+  constructor(public itemsSync: ItemsSyncService, public itemsState: ItemsStateService){}
 
   ngOnInit(){
-    this.items.refreshItems();
+    this.itemsSync.refreshItems();
   }
 }

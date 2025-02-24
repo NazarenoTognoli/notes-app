@@ -3,6 +3,7 @@
     max-width: 550px;
     height: 300px;
     flex-grow: 1;
+    box-sizing: border-box;
 }
 @keyframes fadeIn {
   from {
@@ -25,6 +26,7 @@
     transition: outline-color .3s ease, filter .3s ease;
     animation: fadeIn .18s ease-in forwards;
     opacity: 0;
+    box-sizing: border-box;
 }
     .body {
         height: 100%;

@@ -2,7 +2,7 @@
 </header>
 <div id="app-body">
   <div class="items-container" [ngClass]="{ 'items-container-while-editing': itemsState.editor() || itemsState.creation() }">
-    <app-item *ngFor="let item of items.items()" [data]="item"></app-item>
+    <app-item *ngFor="let item of itemsSync.items()" [data]="item"></app-item>
   </div>
   <app-editor *ngIf="itemsState.editor() || itemsState.creation()"></app-editor>  
 </div>

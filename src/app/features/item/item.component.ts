@@ -5,10 +5,10 @@ import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 //MODELS
-import { Item, dummyDatabase } from '@app/shared/models/item.model';
+import { Item, dummyDatabase, ReactiveItem } from '@app/shared/models/item.model';
 //SERVICES
 import { ItemsStateService } from '@app/core/items-state.service';
-import { ItemsService } from '@app/core/items.service';
+import { ItemsSyncService } from '@app/core/items-sync.service';
 
 @Component({
   selector: 'app-item',
@@ -25,23 +25,32 @@ export class ItemComponent {
 
   data = input.required<Item>();
   
-  constructor(public states:ItemsStateService){
+  constructor(public itemsState:ItemsStateService, public itemsSync:ItemsSyncService){
     effect(()=>{
-      if (!this.states.multipleSelection()) this.updateCheckbox(false, true);
+      if (!this.itemsState.multipleSelection()) this.handleCheckbox(false, true);
     }, {allowSignalWrites:true});
   }
 
-  updateCheckbox(state:boolean, loop:boolean = false, firstLoad:boolean = false) {
+  handleCheckbox(state: boolean, loop:boolean = false, firstLoad:boolean = false): void { //TODO: Cambiar parametros a destructuración de objetos
     if (this.selected !== state) this.selected = state;
-    this.states.handleCheckboxUpdate({ id: this.data().id, selected: state }, loop, firstLoad);
+
+    //solo es necesario ejecutar cuando son añadidos nuevos items porque el effect que sincronizaba comenzo a fallar
+    firstLoad ? this.itemsSync.syncReactiveItems() : undefined; 
+
+    this.itemsSync.refreshReactiveItems({ id: this.data().id, selected: state });
+    //Se evita un loop infinito por el effect
+    if (!loop) this.itemsState.multipleSelection.set(this.itemsSync.reactiveItems.some(item => item.selected));
   }
 
-  handleEditorTrigger(){
-    if(!this.states.multipleSelection() && !this.states.editor()) this.states.handleEditor(this.data());
+  handleEditor(): void {
+    if(!this.itemsState.multipleSelection() && !this.itemsState.editor()) {
+      this.itemsState.editorData.set(this.data());
+      this.itemsState.editor.set(true);
+    }
   }
 
   ngAfterViewInit(){
-    this.updateCheckbox(false, false, true);
+    this.handleCheckbox(false, false, true);
   }
 
 }
