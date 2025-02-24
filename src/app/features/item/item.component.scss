@@ -1,9 +1,10 @@
 :host {
-    flex-basis: 300px;
+    flex-basis: 390px;
     max-width: 550px;
     height: 300px;
     flex-grow: 1;
     box-sizing: border-box;
+    z-index: 200;
 }
 @keyframes fadeIn {
   from {

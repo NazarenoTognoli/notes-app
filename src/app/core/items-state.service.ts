@@ -23,6 +23,10 @@ export class ItemsStateService {
   
   editorData;
 
+  filteredItems:Item[] = [];
+
+  searchTerm: string = '';
+
   constructor(private itemsSync: ItemsSyncService){
     this.editorData = signal<Item>(this.itemsSync.items()[0]);
     this.creationData = signal<Item>(this.itemsSync.items()[0]);

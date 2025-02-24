@@ -24,15 +24,6 @@
     position: relative;
     min-height: 100vh;
 }
-#header {
-    background: #282728;
-    display: flex;
-    position: relative;
-    height: 60px;
-    align-items: center;
-    justify-content: flex-end;
-    padding-left: 15px;
-}
 
 #app-body {
     background: #282728;
@@ -55,4 +46,20 @@
 }
 .items-container-while-editing {
     width: 60%;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.no-items-message {
+    font-size: 21px;
+    color: #999;
+    margin:auto;
+    animation: fadeIn 0.3s ease forwards;
 }

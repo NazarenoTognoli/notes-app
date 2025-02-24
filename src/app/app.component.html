@@ -2,7 +2,18 @@
 </header>
 <div id="app-body">
   <div class="items-container" [ngClass]="{ 'items-container-while-editing': itemsState.editor() || itemsState.creation() }">
-    <app-item *ngFor="let item of itemsSync.items()" [data]="item"></app-item>
+    <ng-container *ngIf="!itemsState.searchTerm">
+      <app-item *ngFor="let item of itemsSync.items()" [data]="item"></app-item>
+    </ng-container>
+    <ng-container *ngIf="itemsState.searchTerm">
+      <app-item *ngFor="let item of itemsState.filteredItems" [data]="item"></app-item>
+    </ng-container>
+    <span *ngIf="itemsSync.items().length === 0 && !itemsState.searchTerm && !itemsSync.firstLoad()" class="no-items-message">
+      Click add button to create a note.
+    </span>
+    <span *ngIf="itemsState.searchTerm && itemsState.filteredItems.length === 0" class="no-items-message">
+      No notes found.
+    </span>
   </div>
   <app-editor *ngIf="itemsState.editor() || itemsState.creation()"></app-editor>  
 </div>

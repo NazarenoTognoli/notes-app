@@ -1,3 +1,13 @@
+:host {
+    background: #282728;
+    display: flex;
+    position: relative;
+    height: 60px;
+    align-items: center;
+    justify-content: flex-end;
+    z-index: 100;
+    overflow: visible;
+}
 .btn-styles {
     border: 1px solid #f8fafa;
     color: #f8fafa;
@@ -34,10 +44,6 @@
     border-color: #d5f7d0;
     color: #d5f7d0;
 }
-#select-multiple-btn {
-    border-color: #d0d2f7;
-    color: #d0d2f7;
-}
 .del-button {
     cursor: default;
     color: #777;
@@ -50,6 +56,18 @@
     pointer-events: auto;
     box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.40);
     cursor: pointer;
+}
+.select-button {
+    border-color: #d0d2f7;
+    color: #d0d2f7;
+}
+.select-button-disabled {
+    cursor: default;
+    color: #777;
+    border-color: #777;
+    pointer-events: none;
+    box-shadow: none;
+    user-select: none;
 }
 .del-button-enabled, #cancel-editor-btn {
     color: #f7d0d0;

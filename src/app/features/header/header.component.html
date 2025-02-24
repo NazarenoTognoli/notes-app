@@ -1,4 +1,4 @@
-
+<app-search></app-search>
 <button 
   *ngIf="!itemsState.editor() && !itemsState.multipleSelection() && !itemsState.creation()"
   (click)="handleAddButton()"
@@ -31,7 +31,8 @@
   *ngIf="!itemsState.multipleSelection() && !itemsState.editor() && !itemsState.creation()" 
   (click)="handleSelectButton(true)" 
   id="select-multiple-btn" 
-  class="btn-styles" 
+  class="btn-styles select-button"
+  [ngClass]="{'select-button-disabled': itemsSync.items().length === 0}"
   mat-button>
   select
 </button>

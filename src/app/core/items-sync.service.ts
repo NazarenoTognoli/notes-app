@@ -44,7 +44,10 @@ export class ItemsSyncService {
         this.items.set(newReference);
       }, time += 250);
     });
-    this.firstLoad.set(false);
+    const syncFlag:number = data.length !== 0 ? 250 : 0;
+    setTimeout(()=>{
+      this.firstLoad.set(false)
+    }, syncFlag);
   }
 
   async refreshItems():Promise<void>{
