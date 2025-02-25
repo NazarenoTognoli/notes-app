@@ -15,11 +15,14 @@ import { generateId } from '@app/shared/models/item.model';
 export class EditorComponent implements AfterViewInit {
   @ViewChild('editor') editorElement!: ElementRef<HTMLTextAreaElement>;
   viewInit = false;
-  titleInputValue:string = "";
+  titleInputValue:string = "title undefined";
 
   constructor(public itemsState:ItemsStateService, private itemsSync:ItemsSyncService){
     effect(()=>{
-      if (this.viewInit && (this.itemsState.editor() || this.itemsState.creation())){ this.editorElement.nativeElement.value = this.previousData(); this.titleInputValue = this.previousData(true) }
+      if (this.viewInit && (this.itemsState.editor() || this.itemsState.creation())){ 
+        this.editorElement.nativeElement.value = this.previousData(); 
+        this.titleInputValue = this.previousData(true);
+      }
     });
   }
   onTitleInput(event:Event){
@@ -41,7 +44,9 @@ export class EditorComponent implements AfterViewInit {
     else if (this.itemsState.creation() && this.itemsState.creationData() && title){
       return this.itemsState.creationData().title;
     }
-    else {
+    else if (title) {
+      return "title undefined";
+    } else {
       return "";
     }
   }
