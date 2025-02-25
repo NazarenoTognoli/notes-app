@@ -8,6 +8,11 @@
     z-index: 100;
     overflow: visible;
 }
+.app-search-focus {
+    border-color: #f8fafa;
+    border-color: #d0d2f7;
+    box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.60);
+}
 .btn-styles {
     border: 1px solid #f8fafa;
     color: #f8fafa;

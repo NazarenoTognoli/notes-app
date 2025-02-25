@@ -1,1 +1,12 @@
-<input type="text" [(ngModel)]="itemsSync.searchTerm" (input)="itemsSync.syncFilteredItems()" placeholder="Filter...">
+<input 
+    #input 
+    type="text" 
+    [(ngModel)]="itemsSync.searchTerm" 
+    (input)="itemsSync.syncFilteredItems()"
+    (focus)="onFocus()"
+    (blur)="onBlur()" 
+    placeholder="Filter..." 
+    [ngClass]="{'input-while-searching': itemsSync.searchTerm}">
+<button class="cancel-search-button" [ngClass]="{'cancel-search-button-while-searching': itemsSync.searchTerm}" (click)="clearSearchTerm()">
+    <span>X</span>
+</button>

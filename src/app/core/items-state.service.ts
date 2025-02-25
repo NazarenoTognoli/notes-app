@@ -11,6 +11,8 @@ import { Item } from '@app/shared/models/item.model';
 })
 export class ItemsStateService {
 
+  searchInputFocus:boolean = false;
+
   multipleSelection = signal<boolean>(false);
   
   delButtonEnabled:boolean = false;
