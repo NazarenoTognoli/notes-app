@@ -1,12 +1,20 @@
 <mat-card 
     class="item" 
-    [ngClass]="{'ih': hovered}" 
+    [ngClass]="
+    {   
+        'ih': hovered, 
+        'item-editing': itemsState.editorData()?.id === data().id && itemsState.editor()
+    }"
     (mouseenter)="hovered = true" 
     (mouseleave)="hovered = false">
     
     <div 
         class="mask" 
-        [ngClass]="{'mask-ih': itemsState.multipleSelection() || hovered}">
+        [ngClass]="
+        {
+            'mask-ih': itemsState.multipleSelection() || hovered, 
+            'mask-disabled': itemsState.editorData()?.id === data().id && itemsState.editor()
+        }">
         <div class="mask__header" [ngClass]="{'mask__header-editing': itemsState.editor() || itemsState.creation()}">
             <mat-checkbox
                 [checked]="selected"

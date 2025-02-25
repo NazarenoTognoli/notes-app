@@ -66,6 +66,10 @@
     box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.45);
     //filter: brightness(70%);
 }
+.item-editing {
+    outline-color: #d0d2f7;
+    outline-width: 2px;
+}
 .mask {
     position: absolute;
     display: flex;
@@ -105,4 +109,7 @@ mat-checkbox:hover {
 }
 .mask-ih {
     opacity: 1;
+}
+.mask-disabled {
+    display: none;
 }
