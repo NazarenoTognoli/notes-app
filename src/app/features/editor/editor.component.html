@@ -1,3 +1,4 @@
 <div>
+    <input type="text" class="title-input" (input)="onTitleInput($event)" [(ngModel)]="titleInputValue">
     <textarea autofocus placeholder="Type something..." #editor (keydown.enter)="itemsState.handleConfirmEditor()"></textarea>
 </div>
