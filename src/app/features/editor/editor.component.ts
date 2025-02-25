@@ -39,7 +39,7 @@ export class EditorComponent implements AfterViewInit {
 
   handleCreation(contentValue:string){
     const date = new Date().toString();
-    const data = () => ({id:generateId(), modificationDate: date, creationDate: date, content:contentValue});
+    const data = () => ({id:generateId(), modificationDate: date, title: "title undefined", content:contentValue});
     this.itemsState.creationData.set(data());
   }
 
