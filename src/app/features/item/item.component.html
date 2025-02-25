@@ -1,9 +1,13 @@
+<!-- 
+'item-editing': itemsState.editorData().id === data().id && itemsState.editor()
+'mask-disabled': itemsState.editorData().id === data().id && itemsState.editor()
+ -->
 <mat-card 
     class="item" 
     [ngClass]="
     {   
-        'ih': hovered, 
-        'item-editing': itemsState.editorData()?.id === data().id && itemsState.editor()
+        'ih': hovered,
+        'item-editing': itemEditingState()
     }"
     (mouseenter)="hovered = true" 
     (mouseleave)="hovered = false">
@@ -12,8 +16,8 @@
         class="mask" 
         [ngClass]="
         {
-            'mask-ih': itemsState.multipleSelection() || hovered, 
-            'mask-disabled': itemsState.editorData()?.id === data().id && itemsState.editor()
+            'mask-ih': itemsState.multipleSelection() || hovered,
+            'mask-disabled': itemEditingState()
         }">
         <div class="mask__header" [ngClass]="{'mask__header-editing': itemsState.editor() || itemsState.creation()}">
             <mat-checkbox
@@ -28,11 +32,11 @@
         <span class="body__content">
             {{"ID: " + data().id + " - " + data().content}}
         </span>
-        <div class="creation-date">
+        <!-- <div class="creation-date">
             Creation: {{data().creationDate}}
-        </div>
+        </div> -->
         <div class="modification-date">
-            Last Modification: {{data().modificationDate}}
+            {{data().modificationDate}}
         </div>
     </mat-card-content>
 </mat-card>

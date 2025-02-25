@@ -31,6 +31,21 @@ export class ItemComponent {
     }, {allowSignalWrites:true});
   }
 
+  itemEditingState():boolean{
+    let editorDataId:string = '';
+    //TYPE GUARD
+    if (this.itemsState.editorData()){
+      editorDataId = this.itemsState.editorData().id;
+    }
+
+    const itemId = this.data().id;
+
+    const match = editorDataId === itemId;
+
+    return match && this.itemsState.editor()
+  }
+
+
   handleCheckbox({ state, loop = false }: { state: boolean; loop?: boolean }): void {
     if (this.selected !== state) this.selected = state;
 
