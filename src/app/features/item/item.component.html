@@ -29,8 +29,11 @@
         <div class="mask__item-trigger" (click)="handleEditor()" [ngClass]="{'mask__item-trigger-editing': itemsState.editor() || itemsState.creation()}"></div>
     </div>
     <mat-card-content class="body">
+        <div class="body__title"> 
+            <span class="body__title-span">{{data().title}}</span>
+        </div>
         <span class="body__content">
-            {{data().title}}
+            {{data().content}}
         </span>
         <!-- <div class="creation-date">
             Creation: {{data().creationDate}}
