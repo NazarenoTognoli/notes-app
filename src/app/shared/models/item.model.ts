@@ -44,6 +44,8 @@ export function dummyDatabase(operation: Operations, newReference: Item = data[0
         case 'post':
           if (!data.some(item => item.id === newReference.id)) {
             data.push(newReference);
+          } else {
+            console.error("new reference required");
           }
           break;
       }

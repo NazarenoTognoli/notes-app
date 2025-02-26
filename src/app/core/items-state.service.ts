@@ -36,12 +36,14 @@ export class ItemsStateService {
         this.editor.set(false); //Salida rapida del editor
         await this.itemsSync.putItem(this.editorData());
       }
-      if (this.creation()) {
+      else if (this.creation()) {
         this.creation.set(false);
         await this.itemsSync.postItem(this.creationData());
         this.creationData.set({...this.creationData(), content:""});
       } 
-
+      else {
+        throw new Error("no flag matched");
+      }
       // Asegura sincronización
       await this.itemsSync.refreshItems(); 
 

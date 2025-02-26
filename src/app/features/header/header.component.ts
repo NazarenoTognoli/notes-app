@@ -14,43 +14,49 @@ import { SearchComponent } from '../search/search.component';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-
-  constructor(public itemsState: ItemsStateService, public itemsSync:ItemsSyncService){}
+  constructor(
+    public itemsState: ItemsStateService,
+    public itemsSync: ItemsSyncService
+  ) {}
 
   handleSelectButton(value: boolean): void {
     this.itemsState.multipleSelection.set(value);
   }
 
   handleCancelEditor(): void {
-    //Evitamos actualizaciones inecesarias para evitar bugs y menor rendimiento
-    this.itemsState.editor() ? this.itemsState.editor.set(false) : undefined;
-    this.itemsState.creation() ? this.itemsState.creation.set(false) : undefined;
+    // Evitamos actualizaciones innecesarias para prevenir bugs y mejorar el rendimiento
+    if (this.itemsState.editor()) {
+      this.itemsState.editor.set(false);
+    }
+    if (this.itemsState.creation()) {
+      this.itemsState.creation.set(false);
+    }
   }
 
-  handleAddButton():void{
+  handleAddButton(): void {
     this.itemsState.creation.set(true);
-    const data = this.itemsState.creationData();
   }
 
-  async handleDelButton():Promise<void>{
-    let ids:string[] = [];
-    for (let item of this.itemsSync.reactiveItems) {
-      if (item.selected) ids.push(item.id);
-    }
+  async handleDelButton(): Promise<void> {
+    const ids = this.itemsSync.reactiveItems
+      .filter(item => item.selected)
+      .map(item => item.id);
+
     this.itemsState.multipleSelection.set(false);
-    try{
-      ids.forEach(async id=>{
-        const index = this.itemsSync.items().findIndex(item => item.id === id);
-        const itemToDelete = this.itemsSync.items()[index];
-        
-        await this.itemsSync.deleteItem(itemToDelete);
-        await this.itemsSync.refreshItems();
-      });
-    }
-    catch(error){
-      console.error("connection error " + error);
-    }
 
+    try {
+      //ciclo for…of para procesar cada eliminación de forma secuencial
+      for (const id of ids) {
+        const items = this.itemsSync.items();
+        const index = items.findIndex(item => item.id === id);
+        if (index !== -1) {
+          const itemToDelete = items[index];
+          await this.itemsSync.deleteItem(itemToDelete);
+          await this.itemsSync.refreshItems();
+        }
+      }
+    } catch (error) {
+      console.error("connection error", error);
+    }
   }
-
 }

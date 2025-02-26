@@ -1,35 +1,58 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, effect } from '@angular/core';
+import { Component, AfterViewInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ItemsStateService } from '@app/core/items-state.service';
 import { ItemsSyncService } from '@app/core/items-sync.service';
 import { generateId } from '@app/shared/models/item.model';
+import { AutofocusDirective } from './autofocus.directive';
 
 @Component({
   selector: 'app-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AutofocusDirective],
   templateUrl: './editor.component.html',
   styleUrl: './editor.component.scss'
 })
 export class EditorComponent implements AfterViewInit {
-  @ViewChild('editor') editorElement!: ElementRef<HTMLTextAreaElement>;
-  viewInit = false;
-  titleInputValue:string = "title undefined";
 
+  viewInit = false;
+  titleInputValue:string = "";
+  contentInputValue:string = "";
   constructor(public itemsState:ItemsStateService, private itemsSync:ItemsSyncService){
     effect(()=>{
       if (this.viewInit && (this.itemsState.editor() || this.itemsState.creation())){ 
-        this.editorElement.nativeElement.value = this.previousData(); 
+
+        this.contentInputValue = this.previousData(); 
+
         this.titleInputValue = this.previousData(true);
+      
       }
     });
   }
-  onTitleInput(event:Event){
+  onTitleInput(event: Event): void {
     const inputValue = (event.target as HTMLInputElement).value;
-    this.itemsState.editor() && this.handleEdition(inputValue, true);
-    this.itemsState.creation() && this.handleCreation(inputValue, true);
+    
+    if (this.itemsState.editor()) {
+      this.handleEdition({ value: inputValue, isTitle: true });
+    }
+    
+    if (this.itemsState.creation()) {
+      this.handleCreation({ value: inputValue, isTitle: true });
+    }
+  } 
+
+  onContentInput(event: Event): void {
+    const inputValue = (event.target as HTMLTextAreaElement).value;
+    
+    if (this.itemsState.editor()) {
+      this.handleEdition({ value: inputValue });
+    }
+    
+    if (this.itemsState.creation()) {
+      this.handleCreation({ value: inputValue });
+    }
   }
+
 
   previousData(title:boolean = false):string {
     if(this.itemsState.editor() && !title){
@@ -45,43 +68,48 @@ export class EditorComponent implements AfterViewInit {
       return this.itemsState.creationData().title;
     }
     else if (title) {
-      return "title undefined";
+      return "Title Undefined";
     } else {
       return "";
     }
   }
 
-  handleEdition(contentValue:string, title:boolean = false){
-    const data = () => ({
-      ...this.itemsState.editorData(), 
-      content:!title ? contentValue : this.itemsState.editorData().content,
-      title:!title ? this.itemsState.editorData().title : contentValue,
-      modificationDate:new Date().toString()
-    });
-    this.itemsState.editorData.set(data());
+  handleEdition({ value, isTitle = false }: { value: string; isTitle?: boolean }): void {
+    const { editorData } = this.itemsState;
+    const { content, title } = editorData();  
+
+    const updatedData = {
+      ...editorData(),
+      content: isTitle ? content : value,
+      title: isTitle ? value : title,
+      modificationDate: new Date().toISOString()
+    };  
+
+    editorData.set(updatedData);
+  } 
+
+  handleCreation({ value, isTitle = false }: { value: string; isTitle?: boolean }): void {
+    const { creationData } = this.itemsState;
+    const currentData = creationData() ?? { content: "", title: "Title Undefined" };
+    const { id, content, title } = currentData;
+    
+    const updatedData = {
+      ...currentData,
+      id: generateId(),
+      modificationDate: new Date().toISOString(),
+      title: isTitle ? value : title,
+      content: isTitle ? content : value
+    };  
+
+    creationData.set(updatedData);
   }
 
-  handleCreation(contentValue:string, title:boolean = false){
-    const date = new Date().toString();
-    const creationData = this.itemsState.creationData() ?? {content:"", title:"title undefined"};
-    const data = () => ({
-      ...creationData,
-      id: creationData.id ?? generateId(),
-      modificationDate: date,
-      title: title ? contentValue : creationData.title,
-      content:!title ? contentValue : creationData.content});
-    this.itemsState.creationData.set(data());
-  }
 
   ngAfterViewInit() {
     this.viewInit = true;
-    this.editorElement.nativeElement.value = this.previousData();
-    this.titleInputValue = this.previousData(true);
-    this.editorElement.nativeElement.addEventListener('input', (event:Event)=>{
-      const contentValue = (event.target as HTMLTextAreaElement).value;
-      this.itemsState.editor() ? this.handleEdition(contentValue) : undefined;
-      this.itemsState.creation() ? this.handleCreation(contentValue) : undefined;
-    });
-    this.editorElement.nativeElement.focus();
+    setTimeout(()=>{
+      this.contentInputValue = this.previousData();
+      this.titleInputValue = this.previousData(true);
+    })
   }
 }

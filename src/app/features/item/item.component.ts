@@ -18,60 +18,59 @@ import { ItemsSyncService } from '@app/core/items-sync.service';
   styleUrl: './item.component.scss'
 })
 export class ItemComponent {
-
   hovered = false;
-
   selected = false;
-
   data = input.required<Item>();
-  
-  constructor(public itemsState:ItemsStateService, public itemsSync:ItemsSyncService){
-    effect(()=>{
-      if (!this.itemsState.multipleSelection()) this.handleCheckbox({state:false, loop:true});
-    }, {allowSignalWrites:true});
+
+  constructor(
+    public itemsState: ItemsStateService,
+    public itemsSync: ItemsSyncService
+  ) {
+    effect(
+      () => {
+        if (!this.itemsState.multipleSelection()) {
+          this.handleCheckbox({ state: false, loop: true });
+        }
+      },
+      { allowSignalWrites: true }
+    );
   }
 
-  itemEditingState():boolean{
-    let editorDataId:string = '';
-    //TYPE GUARD
-    if (this.itemsState.editorData()){
-      editorDataId = this.itemsState.editorData().id;
-    }
-
+  itemEditingState(): boolean {
+    const editorDataId = this.itemsState.editorData()?.id ?? '';
     const itemId = this.data().id;
-
-    const match = editorDataId === itemId;
-
-    return match && this.itemsState.editor()
+    return editorDataId === itemId && this.itemsState.editor();
   }
-
 
   handleCheckbox({ state, loop = false }: { state: boolean; loop?: boolean }): void {
-    if (this.selected !== state) this.selected = state;
-
+    if (this.selected !== state) {
+      this.selected = state;
+    }
+    
     this.itemsSync.refreshReactiveItems({ id: this.data().id, selected: state });
-
-    // Se evita un loop infinito por el effect
+    
+    const hasSelected = this.itemsSync.reactiveItems.some(item => item.selected);
     if (!loop) {
-      this.itemsState.multipleSelection.set(this.itemsSync.reactiveItems.some(item => item.selected));
-    } 
-
-    this.itemsState.delButtonEnabled = this.itemsSync.reactiveItems.some(item => item.selected);
+      this.itemsState.multipleSelection.set(hasSelected);
+    }
+    this.itemsState.delButtonEnabled = hasSelected;
   }
-
 
   handleEditor(): void {
-    if(!this.itemsState.multipleSelection()) {
-      if (this.itemsState.editor()) this.itemsState.editor.set(false);
-      if (this.itemsState.creation()) this.itemsState.creation.set(false);
-      this.itemsState.editorData.set(this.data());
-      this.itemsState.editor.set(true);
+    if (this.itemsState.multipleSelection()) {
+      return;
     }
+
+    // Reseteamos los estados de edición y creación
+    this.itemsState.editor.set(false);
+    this.itemsState.creation.set(false);
+    
+    this.itemsState.editorData.set(this.data());
+    this.itemsState.editor.set(true);
   }
 
-  ngAfterViewInit(){
-    // Solo es necesario ejecutar cuando son añadidos para sincronizar estados
+  ngAfterViewInit(): void {
+    // Solo se ejecuta al añadirse para sincronizar estados
     this.itemsSync.syncReactiveItems();
   }
-
 }
