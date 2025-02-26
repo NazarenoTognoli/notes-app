@@ -84,7 +84,8 @@ export class ItemsSyncService {
 
   syncFilteredItems() {
     this.filteredItems = this.items().filter(item =>
-      item.content.toLowerCase().includes(this.searchTerm.toLowerCase())
+      item.content.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      item.title.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 
