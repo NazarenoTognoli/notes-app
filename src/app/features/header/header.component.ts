@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 //SERVICES
 import { ItemsStateService } from '@app/core/items-state.service';
 import { ItemsSyncService } from '@app/core/items-sync.service';
+import { ResizeService } from '@app/core/resize.service';
 //COMPONENT
 import { SearchComponent } from '../search/search.component';
 
@@ -16,21 +17,12 @@ import { SearchComponent } from '../search/search.component';
 export class HeaderComponent {
   constructor(
     public itemsState: ItemsStateService,
-    public itemsSync: ItemsSyncService
+    public itemsSync: ItemsSyncService,
+    private resize:ResizeService
   ) {}
 
   handleSelectButton(value: boolean): void {
     this.itemsState.multipleSelection.set(value);
-  }
-
-  handleCancelEditor(): void {
-    // Evitamos actualizaciones innecesarias para prevenir bugs y mejorar el rendimiento
-    if (this.itemsState.editor()) {
-      this.itemsState.editor.set(false);
-    }
-    if (this.itemsState.creation()) {
-      this.itemsState.creation.set(false);
-    }
   }
 
   handleAddButton(): void {

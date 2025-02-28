@@ -9,3 +9,7 @@ $secondary-color: #2ecc71; // Green
 $danger-color: #e74c3c; // Red
 $text-color: #ffaa44; // Dark gray
 $background-color: #ecf0f1; // Light 
+
+.no-select {
+    user-select: none;
+}

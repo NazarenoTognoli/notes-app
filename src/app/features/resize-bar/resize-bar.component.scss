@@ -1,0 +1,18 @@
+:host {
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 4px;
+    z-index: 500;
+    left: 3px;
+    background: transparent;
+    cursor: col-resize;
+}
+:host:hover{
+    //box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.60);
+    background: #e0ecf7;
+}
+:host:active{
+    background: #eeF;
+    //box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.80);
+}

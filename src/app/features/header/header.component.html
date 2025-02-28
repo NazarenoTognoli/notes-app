@@ -48,7 +48,7 @@
 
 <button 
   *ngIf="(itemsState.editor() || itemsState.creation()) && !itemsState.multipleSelection()" 
-  (click)="handleCancelEditor()"
+  (click)="itemsState.handleCancelEditor()"
   id="cancel-editor-btn" 
   class="btn-styles" 
   mat-mini-fab>

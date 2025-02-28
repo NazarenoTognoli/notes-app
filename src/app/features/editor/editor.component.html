@@ -12,5 +12,9 @@
     (input)="onContentInput($event)"
     (keydown.enter)="itemsState.handleConfirmEditor()"
     [(ngModel)]="contentInputValue"
-    ></textarea>
+    >
+    </textarea>
+    <app-resize-bar
+    [primaryElementCurrentWidth]="getCurrentWidth"
+    ></app-resize-bar>
 </div>

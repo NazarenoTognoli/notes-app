@@ -19,6 +19,8 @@ import { EditorComponent } from './features/editor/editor.component';
 //MODELS
 import { Item, ReactiveItem, dummyDatabase } from '@app/shared/models/item.model';
 
+import { ResizeService } from './core/resize.service';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -36,7 +38,7 @@ import { Item, ReactiveItem, dummyDatabase } from '@app/shared/models/item.model
 })
 export class AppComponent {
 
-  constructor(public itemsSync: ItemsSyncService, public itemsState: ItemsStateService){}
+  constructor(public itemsSync: ItemsSyncService, public itemsState: ItemsStateService, public resize:ResizeService){}
 
   ngOnInit(){
     this.itemsSync.refreshItems();

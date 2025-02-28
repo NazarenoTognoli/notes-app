@@ -1,24 +1,40 @@
-import { Component, AfterViewInit, effect } from '@angular/core';
+//originalWidth + IF DIRECTION === RIGHT OR BOTTOM. - IF DIRECTION === LEFT OR TOP.
+import { Component, AfterViewInit, effect, ElementRef, Host, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import { ItemsStateService } from '@app/core/items-state.service';
 import { ItemsSyncService } from '@app/core/items-sync.service';
+import { ResizeService } from '@app/core/resize.service';
+
 import { generateId } from '@app/shared/models/item.model';
-import { AutofocusDirective } from './autofocus.directive';
+
+import { AutofocusDirective } from '@app/features/editor/autofocus.directive';
+
+import { ResizeBarComponent } from '@app/features/resize-bar/resize-bar.component';
 
 @Component({
   selector: 'app-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule, AutofocusDirective],
+  imports: [CommonModule, FormsModule, AutofocusDirective, ResizeBarComponent],
   templateUrl: './editor.component.html',
   styleUrl: './editor.component.scss'
 })
 export class EditorComponent implements AfterViewInit {
 
+  //primaryElementWidth = primaryElementWidth - (event.clientX - startPositionX);
+  
+  //secondaryElementWidth: allWIdth - primaryElementWidth;
+
   viewInit = false;
   titleInputValue:string = "";
   contentInputValue:string = "";
-  constructor(public itemsState:ItemsStateService, private itemsSync:ItemsSyncService){
+
+  constructor(
+    public itemsState:ItemsStateService, 
+    private itemsSync:ItemsSyncService, 
+    @Host() public hostElement: ElementRef,
+    public resize:ResizeService){
     effect(()=>{
       if (this.viewInit && (this.itemsState.editor() || this.itemsState.creation())){ 
 
@@ -29,6 +45,9 @@ export class EditorComponent implements AfterViewInit {
       }
     });
   }
+
+  getCurrentWidth = () => this.hostElement.nativeElement.getBoundingClientRect().width;
+
   onTitleInput(event: Event): void {
     const inputValue = (event.target as HTMLInputElement).value;
     
@@ -106,6 +125,15 @@ export class EditorComponent implements AfterViewInit {
 
 
   ngAfterViewInit() {
+    if(!this.resize.primaryElementWidthPxPrevious){
+      this.resize.primaryElementWidthPx.set(this.resize.toPixels(40));
+    } else {
+      this.resize.primaryElementWidthPx.set(this.resize.primaryElementWidthPxPrevious);
+    }
+    console.log(this.resize.secondaryElementWidthPct());
+    console.log(this.resize.primaryElementWidthPct());
+    setTimeout(()=>console.log(this.resize.secondaryElementWidthPct()), 2000);
+    setTimeout(()=>console.log(this.resize.primaryElementWidthPct()), 2000);
     this.viewInit = true;
     setTimeout(()=>{
       this.contentInputValue = this.previousData();
@@ -113,3 +141,4 @@ export class EditorComponent implements AfterViewInit {
     })
   }
 }
+  

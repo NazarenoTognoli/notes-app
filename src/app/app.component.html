@@ -1,7 +1,7 @@
 <header app-header id="header">
 </header>
 <div id="app-body">
-  <div class="items-container" [ngClass]="{ 'items-container-while-editing': itemsState.editor() || itemsState.creation() }">
+  <div class="items-container" [ngClass]="{ 'items-container-while-editing': itemsState.editor() || itemsState.creation() }" [style.width.%]="resize.secondaryElementWidthPct()">
     <ng-container *ngIf="!itemsSync.searchTerm">
       <app-item *ngFor="let item of itemsSync.items()" [data]="item"></app-item>
     </ng-container>
@@ -15,5 +15,5 @@
       No notes found.
     </span>
   </div>
-  <app-editor *ngIf="itemsState.editor() || itemsState.creation()"></app-editor>  
+  <app-editor *ngIf="itemsState.editor() || itemsState.creation()" [style.width.%]="resize.primaryElementWidthPct()"></app-editor>  
 </div>
