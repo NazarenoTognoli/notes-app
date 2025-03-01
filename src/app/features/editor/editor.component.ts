@@ -87,7 +87,7 @@ export class EditorComponent implements AfterViewInit {
       return this.itemsState.creationData().title;
     }
     else if (title) {
-      return "Title Undefined";
+      return "";
     } else {
       return "";
     }
@@ -116,7 +116,7 @@ export class EditorComponent implements AfterViewInit {
       ...currentData,
       id: generateId(),
       modificationDate: new Date().toISOString(),
-      title: isTitle ? value : title,
+      title: isTitle ? value : "Title Undefined",
       content: isTitle ? content : value
     };  
 

@@ -52,13 +52,14 @@ export class ItemsStateService {
   async handleConfirmEditor(): Promise<void> {
     try {
       if (this.editor()) {
-        this.handleCancelEditor(); //Salida rapida del editor
+         //Salida rapida del editor
+        this.handleCancelEditor();
         await this.itemsSync.putItem(this.editorData());
       }
       else if (this.creation()) {
         this.handleCancelEditor();
         await this.itemsSync.postItem(this.creationData());
-        this.creationData.set({...this.creationData(), content:""});
+        this.creationData.set({...this.creationData(), content:"", title:""});
       } 
       else {
         throw new Error("no flag matched");

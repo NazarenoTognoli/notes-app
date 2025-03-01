@@ -1,4 +1,10 @@
-<app-search [ngClass]="{'app-search-focus': itemsState.searchInputFocus, 'app-search-disabled': itemsState.isResolutionSmall && (itemsState.editor() || itemsState.creation())}"></app-search>
+<app-search 
+[ngClass]="
+  {
+    'app-search-focus': itemsState.searchInputFocus, 
+    'app-search-disabled': (itemsState.isResolutionSmall && (itemsState.editor() || itemsState.creation())) || itemsSync.items().length === 0
+  }">
+</app-search>
 <button 
   *ngIf="!itemsState.editor() && !itemsState.multipleSelection() && !itemsState.creation()"
   (click)="handleAddButton()"
