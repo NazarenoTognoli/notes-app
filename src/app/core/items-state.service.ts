@@ -12,6 +12,9 @@ import { Item } from '@app/shared/models/item.model';
 })
 export class ItemsStateService {
 
+  isResolutionSmall:boolean = window.matchMedia('(max-width: 800px)').matches;
+
+
   searchInputFocus:boolean = false;
 
   multipleSelection = signal<boolean>(false);
@@ -29,6 +32,9 @@ export class ItemsStateService {
   constructor(private itemsSync: ItemsSyncService, private resize:ResizeService){
     this.editorData = signal<Item>(this.itemsSync.items()[0]);
     this.creationData = signal<Item>(this.itemsSync.items()[0]);
+    window.matchMedia('(max-width: 800px)').addEventListener('change', (event) => {
+      this.isResolutionSmall = event.matches;
+    });
   }
 
   handleCancelEditor(): void {
@@ -39,7 +45,7 @@ export class ItemsStateService {
     if (this.creation()) {
       this.creation.set(false);
     }
-    if(this.resize.primaryElementWidthPx()) this.resize.primaryElementWidthPxPrevious = this.resize.primaryElementWidthPx();
+    if(this.resize.primaryElementWidthPx()) this.resize.primaryElementWidthPxPrevious = this.resize.primaryElementWidthPx() > 400 ? this.resize.primaryElementWidthPx() : 400;
     this.resize.primaryElementWidthPx.set(0);
   }
 

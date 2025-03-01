@@ -130,10 +130,7 @@ export class EditorComponent implements AfterViewInit {
     } else {
       this.resize.primaryElementWidthPx.set(this.resize.primaryElementWidthPxPrevious);
     }
-    console.log(this.resize.secondaryElementWidthPct());
-    console.log(this.resize.primaryElementWidthPct());
-    setTimeout(()=>console.log(this.resize.secondaryElementWidthPct()), 2000);
-    setTimeout(()=>console.log(this.resize.primaryElementWidthPct()), 2000);
+    this.resize.primaryElementCurrentWidth = this.getCurrentWidth;
     this.viewInit = true;
     setTimeout(()=>{
       this.contentInputValue = this.previousData();

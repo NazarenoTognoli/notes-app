@@ -1,7 +1,11 @@
 <header app-header id="header">
 </header>
 <div id="app-body">
-  <div class="items-container" [ngClass]="{ 'items-container-while-editing': itemsState.editor() || itemsState.creation() }" [style.width.%]="resize.secondaryElementWidthPct()">
+  <div class="items-container" 
+  *ngIf="
+  (!itemsState.editor() && !itemsState.creation()) || !itemsState.isResolutionSmall" 
+  [ngClass]="{ 'items-container-while-editing': itemsState.editor() || itemsState.creation() }" 
+  [style.width.%]="resize.secondaryElementWidthPct()">
     <ng-container *ngIf="!itemsSync.searchTerm">
       <app-item *ngFor="let item of itemsSync.items()" [data]="item"></app-item>
     </ng-container>
@@ -15,5 +19,9 @@
       No notes found.
     </span>
   </div>
-  <app-editor *ngIf="itemsState.editor() || itemsState.creation()" [style.width.%]="resize.primaryElementWidthPct()"></app-editor>  
+  <app-editor 
+  *ngIf="itemsState.editor() || itemsState.creation()" 
+  [style.width.%]="!itemsState.isResolutionSmall ? resize.primaryElementWidthPct() : 100"
+  [ngClass]="{'app-editor-smallresolution':itemsState.isResolutionSmall}">
+  </app-editor>  
 </div>

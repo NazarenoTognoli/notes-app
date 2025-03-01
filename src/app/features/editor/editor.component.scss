@@ -17,6 +17,10 @@ div {
     margin-left: 5px;
     border-left: 1px solid #aaa;
 }
+.editor__div-smallresolution {
+    margin-left: 0;
+    border-left: 0;
+}
 /* Ocultar la scrollbar en general (opcional) */
 ::-webkit-scrollbar {
   width: 6px;  /* Ancho de la barra vertical */

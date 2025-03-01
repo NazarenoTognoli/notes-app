@@ -5,6 +5,12 @@ import { Injectable, signal, effect, OnInit, computed } from '@angular/core';
 })
 export class ResizeService implements OnInit{
 
+  primaryElementCurrentWidth = () => 0;
+
+  constructor(){
+    window.addEventListener('resize',this.handleResize);
+  }
+
   toPixels(value:number){
     return value / 100 * window.innerWidth;
   }
@@ -21,9 +27,18 @@ export class ResizeService implements OnInit{
   secondaryElementWidthPx = () => window.innerWidth - this.primaryElementWidthPx();
   
   primaryElementWidthPct = computed(() => this.toPercentage(this.primaryElementWidthPx()));
+
   secondaryElementWidthPct = computed(() => this.toPercentage(this.secondaryElementWidthPx()));
 
-  
-  ngOnInit(): void {  }
-  //[style.width.%]="resize.secondaryElementWidth()"
+  handleResize = ()=> {
+    const rawValuePx = this.primaryElementCurrentWidth();
+    this.primaryElementWidthPx.set(rawValuePx);
+    if (rawValuePx >= (window.innerWidth - 400) && this.primaryElementWidthPx()) {
+      this.primaryElementWidthPx.set(window.innerWidth - 400);
+    }
+    else if(rawValuePx <= 400 && this.primaryElementWidthPx()){
+      this.primaryElementWidthPx.set(400);
+    }
+  }
+  ngOnInit(): void {}
 }

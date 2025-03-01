@@ -1,4 +1,4 @@
-<div>
+<div [ngClass]="{'editor__div-smallresolution':itemsState.isResolutionSmall}">
     <input 
     type="text" 
     class="title-input" 
@@ -14,7 +14,7 @@
     [(ngModel)]="contentInputValue"
     >
     </textarea>
-    <app-resize-bar
+    <app-resize-bar *ngIf="!itemsState.isResolutionSmall"
     [primaryElementCurrentWidth]="getCurrentWidth"
     ></app-resize-bar>
 </div>
