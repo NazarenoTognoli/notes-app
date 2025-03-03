@@ -1,32 +1,32 @@
 <app-search 
 [ngClass]="
   {
-    'app-search-focus': itemsState.searchInputFocus, 
-    'app-search-disabled': (itemsState.isResolutionSmall && (itemsState.editor() || itemsState.creation())) || itemsSync.items().length === 0
+    'app-search-focus': search.searchInputFocus, 
+    'app-search-disabled': (global.isResolutionSmall && (editor.editor() || editor.creation())) || itemsSync.items().length === 0
   }">
 </app-search>
 <button 
-  *ngIf="!itemsState.editor() && !itemsState.multipleSelection() && !itemsState.creation()"
+  *ngIf="!editor.editor() && !itemsContainer.multipleSelection() && !editor.creation()"
   (click)="handleAddButton()"
   id="add-button" 
   class="btn-styles"
   mat-button>
   add
 </button>
-
+<!-- TODO:MOVER LA LOGICA AL SCRIPT EN LUGAR DEL TEMPLATE -->
 <button 
-  *ngIf="!itemsState.editor() && itemsState.multipleSelection() && !itemsState.creation()" 
+  *ngIf="!editor.editor() && itemsContainer.multipleSelection() && !editor.creation()" 
   (click)="handleDelButton()"
   id="del-button" 
   class="btn-styles del-button"
-  [ngClass]="{'del-button-enabled':itemsState.delButtonEnabled}"
+  [ngClass]="{'del-button-enabled':header.delButtonEnabled}"
   mat-button>
   del
 </button>
 
 <button 
-  *ngIf="(itemsState.editor() || itemsState.creation()) && !itemsState.multipleSelection()" 
-  (click)="itemsState.handleConfirmEditor()"
+  *ngIf="(editor.editor() || editor.creation()) && !itemsContainer.multipleSelection()" 
+  (click)="editor.handleConfirmEditor()"
   id="confirm-editor-btn"
   class="btn-styles" 
   mat-button>
@@ -34,7 +34,7 @@
 </button>
 
 <button 
-  *ngIf="!itemsState.multipleSelection() && !itemsState.editor() && !itemsState.creation()" 
+  *ngIf="!itemsContainer.multipleSelection() && !editor.editor() && !editor.creation()" 
   (click)="handleSelectButton(true)" 
   id="select-multiple-btn" 
   class="btn-styles select-button"
@@ -44,7 +44,7 @@
 </button>
 
 <button 
-  *ngIf="itemsState.multipleSelection() && !itemsState.editor() && !itemsState.creation()" 
+  *ngIf="itemsContainer.multipleSelection() && !editor.editor() && !editor.creation()" 
   (click)="handleSelectButton(false)" 
   id="cancel-selection-btn" 
   class="btn-styles" 
@@ -53,8 +53,8 @@
 </button>
 
 <button 
-  *ngIf="(itemsState.editor() || itemsState.creation()) && !itemsState.multipleSelection()" 
-  (click)="itemsState.handleCancelEditor()"
+  *ngIf="(editor.editor() || editor.creation()) && !itemsContainer.multipleSelection()" 
+  (click)="editor.handleCancelEditor()"
   id="cancel-editor-btn" 
   class="btn-styles" 
   mat-mini-fab>

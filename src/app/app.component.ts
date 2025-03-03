@@ -6,8 +6,11 @@ import { RouterOutlet } from '@angular/router';
 import { of, from } from 'rxjs';
 import { concatMap, delay } from 'rxjs/operators';
 //SERVICES
-import { ItemsSyncService } from './core/items-sync.service';
-import { ItemsStateService } from '@app/core/items-state.service';
+import { ItemsSyncService } from './features/items-container/items-sync.service';
+import { GlobalService } from './core/global.service';
+import { EditorService } from './features/editor/editor.service';
+import { SearchService } from './features/search/search.service';
+import { ItemsContainerService } from './features/items-container/items-container.service';
 //ANGULAR MATERIAL
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
@@ -16,10 +19,9 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { ItemComponent} from '@app/features/item/item.component';
 import { HeaderComponent } from '@app/features/header/header.component';
 import { EditorComponent } from './features/editor/editor.component';
+import { ItemsContainerComponent } from './features/items-container/items-container.component';
 //MODELS
 import { Item, ReactiveItem, dummyDatabase } from '@app/shared/models/item.model';
-
-import { ResizeService } from './core/resize.service';
 
 @Component({
   selector: 'app-root',
@@ -32,13 +34,18 @@ import { ResizeService } from './core/resize.service';
     CommonModule, 
     MatGridListModule,
     HeaderComponent,
-    EditorComponent],
+    EditorComponent,
+    ItemsContainerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
 
-  constructor(public itemsSync: ItemsSyncService, public itemsState: ItemsStateService, public resize:ResizeService){}
+  constructor(public itemsSync: ItemsSyncService, 
+    public global:GlobalService,
+    public editor:EditorService,
+    public search:SearchService,
+    public itemsContainer:ItemsContainerService){}
 
   ngOnInit(){
     this.itemsSync.refreshItems();

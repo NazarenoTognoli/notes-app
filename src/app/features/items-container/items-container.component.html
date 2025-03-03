@@ -1,0 +1,17 @@
+<!-- ALL NOTES -->
+<ng-container *ngIf="!search.searchTerm">
+  <app-item *ngFor="let item of itemsSync.items()" [data]="item"></app-item>
+</ng-container>
+
+<!-- FILTERED NOTES -->
+<ng-container *ngIf="search.searchTerm">
+  <app-item *ngFor="let item of itemsSync.filteredItems" [data]="item"></app-item>
+</ng-container>
+
+<span *ngIf="itemsSync.items().length === 0 && !search.searchTerm && !itemsSync.firstLoad()" class="no-items-message">
+  Click add button to create a note.
+</span>
+
+<span *ngIf="search.searchTerm && itemsSync.filteredItems.length === 0" class="no-items-message">
+  No notes found.
+</span>

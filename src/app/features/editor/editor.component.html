@@ -1,20 +1,20 @@
-<div [ngClass]="{'editor__div-smallresolution':itemsState.isResolutionSmall}">
+<div [ngClass]="{'editor__div-smallresolution':global.isResolutionSmall}">
     <input 
     type="text" 
     class="title-input" 
     (input)="onTitleInput($event)" 
     [(ngModel)]="titleInputValue" 
-    (keydown.enter)="itemsState.handleConfirmEditor()">
+    (keydown.enter)="editorService.handleConfirmEditor()">
     <textarea 
     appAutofocus
     placeholder="Type something..." 
     #editor 
     (input)="onContentInput($event)"
-    (keydown.enter)="itemsState.handleConfirmEditor()"
+    (keydown.enter)="editorService.handleConfirmEditor()"
     [(ngModel)]="contentInputValue"
     >
     </textarea>
-    <app-resize-bar *ngIf="!itemsState.isResolutionSmall"
+    <app-resize *ngIf="!global.isResolutionSmall"
     [primaryElementCurrentWidth]="getCurrentWidth"
-    ></app-resize-bar>
+    ></app-resize>
 </div>

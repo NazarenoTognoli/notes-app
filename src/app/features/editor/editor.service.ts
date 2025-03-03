@@ -1,40 +1,43 @@
-import { Injectable, signal, effect } from '@angular/core';
-//SERVICES
-import { ItemsSyncService } from './items-sync.service';
-import { ResizeService } from './resize.service';
-//MODELS
+import { Injectable, signal, computed } from '@angular/core';
 import { Item } from '@app/shared/models/item.model';
-
-
-
+import { toPercentage } from '@app/shared/utils/units-conversion';
+import { ItemsSyncService } from '../items-container/items-sync.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ItemsStateService {
-
-  isResolutionSmall:boolean = window.matchMedia('(max-width: 800px)').matches;
-
-
-  searchInputFocus:boolean = false;
-
-  multipleSelection = signal<boolean>(false);
-  
-  delButtonEnabled:boolean = false;
-  
+export class EditorService {
+  editorWidthPxCurrent = () => 0;
+  editorWidthPxState = signal<number>(0);
+  editorWidthPxPreviousState = 0;
+  editorWidthPctState = computed(() => toPercentage(this.editorWidthPxState()));
+  //EDITOR STATE LOGIC HERE
   editor = signal<boolean>(false);
-  
+  //EDITOR STATE LOGIC HERE
   creation = signal<boolean>(false);
-
+  //EDITOR STATE LOGIC HERE
   creationData;
-  
+  //EDITOR STATE LOGIC HERE
   editorData;
 
-  constructor(private itemsSync: ItemsSyncService, private resize:ResizeService){
+  constructor(private itemsSync: ItemsSyncService){
     this.editorData = signal<Item>(this.itemsSync.items()[0]);
     this.creationData = signal<Item>(this.itemsSync.items()[0]);
-    window.matchMedia('(max-width: 800px)').addEventListener('change', (event) => {
-      this.isResolutionSmall = event.matches;
-    });
+  }
+
+  normalizeSizeAndTrackPrevious = () => {
+    if(this.editorWidthPxState()) this.editorWidthPxPreviousState = this.editorWidthPxState();
+    this.editorWidthPxState.set(0);
+  }
+
+  syncEditorWidthPxState = ()=> {
+    const {editorWidthPxCurrent} = this;
+    this.editorWidthPxState.set(editorWidthPxCurrent());
+    if (editorWidthPxCurrent() >= (window.innerWidth - 400) && this.editorWidthPxState()) {
+      this.editorWidthPxState.set(window.innerWidth - 400);
+    }
+    else if(editorWidthPxCurrent() <= 400 && this.editorWidthPxState()){
+      this.editorWidthPxState.set(400);
+    }
   }
 
   handleCancelEditor(): void {
@@ -45,8 +48,7 @@ export class ItemsStateService {
     if (this.creation()) {
       this.creation.set(false);
     }
-    if(this.resize.primaryElementWidthPx()) this.resize.primaryElementWidthPxPrevious = this.resize.primaryElementWidthPx() > 400 ? this.resize.primaryElementWidthPx() : 400;
-    this.resize.primaryElementWidthPx.set(0);
+    this.normalizeSizeAndTrackPrevious();
   }
 
   async handleConfirmEditor(): Promise<void> {
@@ -71,5 +73,4 @@ export class ItemsStateService {
       console.error("Error en la actualización:", error);
     }
   }
-
 }

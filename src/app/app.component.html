@@ -1,27 +1,23 @@
 <header app-header id="header">
 </header>
 <div id="app-body">
-  <div class="items-container" 
+
+  <app-items-container
+  
   *ngIf="
-  (!itemsState.editor() && !itemsState.creation()) || !itemsState.isResolutionSmall" 
-  [ngClass]="{ 'items-container-while-editing': itemsState.editor() || itemsState.creation() }" 
-  [style.width.%]="resize.secondaryElementWidthPct()">
-    <ng-container *ngIf="!itemsSync.searchTerm">
-      <app-item *ngFor="let item of itemsSync.items()" [data]="item"></app-item>
-    </ng-container>
-    <ng-container *ngIf="itemsSync.searchTerm">
-      <app-item *ngFor="let item of itemsSync.filteredItems" [data]="item"></app-item>
-    </ng-container>
-    <span *ngIf="itemsSync.items().length === 0 && !itemsSync.searchTerm && !itemsSync.firstLoad()" class="no-items-message">
-      Click add button to create a note.
-    </span>
-    <span *ngIf="itemsSync.searchTerm && itemsSync.filteredItems.length === 0" class="no-items-message">
-      No notes found.
-    </span>
-  </div>
+  (!editor.editor() && !editor.creation()) || !global.isResolutionSmall" 
+  [ngClass]="{ 'items-container-while-editing': editor.editor() || editor.creation() }" 
+  [style.width.%]="itemsContainer.itemsContainerWidthPctState()">
+  
+  </app-items-container>
+  
+
   <app-editor 
-  *ngIf="itemsState.editor() || itemsState.creation()" 
-  [style.width.%]="!itemsState.isResolutionSmall ? resize.primaryElementWidthPct() : 100"
-  [ngClass]="{'app-editor-smallresolution':itemsState.isResolutionSmall}">
+  
+  *ngIf="editor.editor() || editor.creation()" 
+  [style.width.%]="!global.isResolutionSmall ? editor.editorWidthPctState() : 100"
+  [ngClass]="{'app-editor-smallresolution':global.isResolutionSmall}">
+  
   </app-editor>  
+
 </div>

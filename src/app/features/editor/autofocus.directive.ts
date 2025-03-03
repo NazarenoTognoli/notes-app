@@ -1,15 +1,14 @@
 import { Directive, ElementRef, AfterViewInit, effect } from '@angular/core';
-import { ItemsStateService } from '@app/core/items-state.service';
-
+import { EditorService } from './editor.service';
 @Directive({
   selector: '[appAutofocus]',
   standalone: true
 })
 export class AutofocusDirective implements AfterViewInit {
 
-  constructor(private el: ElementRef, private itemsState: ItemsStateService) {
+  constructor(private el: ElementRef, private editor:EditorService) {
     effect(() => {
-      if (this.itemsState.editor()) {
+      if (this.editor.editor()) {
         this.el.nativeElement.focus();
       }
     });

@@ -1,9 +1,12 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 //SERVICES
-import { ItemsStateService } from '@app/core/items-state.service';
-import { ItemsSyncService } from '@app/core/items-sync.service';
-import { ResizeService } from '@app/core/resize.service';
+import { ItemsSyncService } from '../items-container/items-sync.service';
+import { GlobalService } from '@app/core/global.service';
+import { SearchService } from '../search/search.service';
+import { EditorService } from '../editor/editor.service';
+import { HeaderService } from './header.service';
+import { ItemsContainerService } from '../items-container/items-container.service';
 //COMPONENT
 import { SearchComponent } from '../search/search.component';
 
@@ -16,17 +19,20 @@ import { SearchComponent } from '../search/search.component';
 })
 export class HeaderComponent {
   constructor(
-    public itemsState: ItemsStateService,
     public itemsSync: ItemsSyncService,
-    private resize:ResizeService
+    public global:GlobalService,
+    public search:SearchService,
+    public editor:EditorService,
+    public header:HeaderService,
+    public itemsContainer:ItemsContainerService
   ) {}
 
   handleSelectButton(value: boolean): void {
-    this.itemsState.multipleSelection.set(value);
+    this.itemsContainer.multipleSelection.set(value);
   }
 
   handleAddButton(): void {
-    this.itemsState.creation.set(true);
+    this.editor.creation.set(true);
   }
 
   async handleDelButton(): Promise<void> {
@@ -34,7 +40,7 @@ export class HeaderComponent {
       .filter(item => item.selected)
       .map(item => item.id);
 
-    this.itemsState.multipleSelection.set(false);
+    this.itemsContainer.multipleSelection.set(false);
 
     try {
       //ciclo for…of para procesar cada eliminación de forma secuencial

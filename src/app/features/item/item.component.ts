@@ -7,8 +7,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 //MODELS
 import { Item, dummyDatabase, ReactiveItem } from '@app/shared/models/item.model';
 //SERVICES
-import { ItemsStateService } from '@app/core/items-state.service';
-import { ItemsSyncService } from '@app/core/items-sync.service';
+import { ItemsSyncService } from '../items-container/items-sync.service';
+import { EditorService } from '../editor/editor.service';
+import { HeaderService } from '../header/header.service';
+import { ItemsContainerService } from '../items-container/items-container.service';
 
 @Component({
   selector: 'app-item',
@@ -23,12 +25,14 @@ export class ItemComponent {
   data = input.required<Item>();
 
   constructor(
-    public itemsState: ItemsStateService,
-    public itemsSync: ItemsSyncService
+    public itemsSync: ItemsSyncService,
+    public editor:EditorService,
+    private header:HeaderService,
+    public itemsContainer:ItemsContainerService
   ) {
     effect(
       () => {
-        if (!this.itemsState.multipleSelection()) {
+        if (!this.itemsContainer.multipleSelection()) {
           this.handleCheckbox({ state: false, loop: true });
         }
       },
@@ -37,9 +41,9 @@ export class ItemComponent {
   }
 
   itemEditingState(): boolean {
-    const editorDataId = this.itemsState.editorData()?.id ?? '';
+    const editorDataId = this.editor.editorData()?.id ?? '';
     const itemId = this.data().id;
-    return editorDataId === itemId && this.itemsState.editor();
+    return editorDataId === itemId && this.editor.editor();
   }
 
   handleCheckbox({ state, loop = false }: { state: boolean; loop?: boolean }): void {
@@ -50,23 +54,25 @@ export class ItemComponent {
     this.itemsSync.refreshReactiveItems({ id: this.data().id, selected: state });
     
     const hasSelected = this.itemsSync.reactiveItems.some(item => item.selected);
+
     if (!loop) {
-      this.itemsState.multipleSelection.set(hasSelected);
+      this.itemsContainer.multipleSelection.set(hasSelected);
     }
-    this.itemsState.delButtonEnabled = hasSelected;
+    
+    this.header.delButtonEnabled = hasSelected;
   }
 
   handleEditor(): void {
-    if (this.itemsState.multipleSelection()) {
+    if (this.itemsContainer.multipleSelection()) {
       return;
     }
 
     // Reseteamos los estados de edición y creación
-    this.itemsState.editor.set(false);
-    this.itemsState.creation.set(false);
+    this.editor.editor.set(false);
+    this.editor.creation.set(false);
     
-    this.itemsState.editorData.set(this.data());
-    this.itemsState.editor.set(true);
+    this.editor.editorData.set(this.data());
+    this.editor.editor.set(true);
   }
 
   ngAfterViewInit(): void {

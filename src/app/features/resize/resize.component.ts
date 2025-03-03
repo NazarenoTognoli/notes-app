@@ -1,20 +1,21 @@
-import { Component, HostListener, AfterViewInit, input } from '@angular/core';
-
-import { ResizeService } from '@app/core/resize.service';
+import { Component, HostListener, input, AfterViewInit } from '@angular/core';
+import { ResizeService } from './resize.service';
+import { toPixels } from '@app/shared/utils/units-conversion';
+import { EditorService } from '../editor/editor.service';
 
 @Component({
-  selector: 'app-resize-bar',
+  selector: 'app-resize',
   standalone: true,
   imports: [],
-  templateUrl: './resize-bar.component.html',
-  styleUrl: './resize-bar.component.scss'
+  templateUrl: './resize.component.html',
+  styleUrl: './resize.component.scss'
 })
-export class ResizeBarComponent implements AfterViewInit {
-  constructor(private resize:ResizeService){}
+export class ResizeComponent implements AfterViewInit {
+  constructor(private resize:ResizeService, private editor:EditorService){}
   
   mouseStartPosition:number = 0;
 
-  primaryElementCurrentWidth = input(()=>this.resize.toPixels(40));
+  primaryElementCurrentWidth = input(()=>toPixels(40));
 
   initialWidth:number = 0;
 
@@ -36,7 +37,7 @@ export class ResizeBarComponent implements AfterViewInit {
     const newValue = () => this.initialWidth - (event.clientX - this.mouseStartPosition);
     if (newValue() >= window.innerWidth - 400) return;
     if (newValue() <= 400) return;
-    this.resize.primaryElementWidthPx.set(newValue());
+    this.editor.editorWidthPxState.set(newValue());
   }
 
   private onMouseUpBound = (event: MouseEvent) => this.onMouseUp(event);
@@ -50,6 +51,7 @@ export class ResizeBarComponent implements AfterViewInit {
     window.removeEventListener('mouseup', this.onMouseUpBound);
   }
   ngAfterViewInit(){
-    this.resize.primaryElementWidthPx.set(this.primaryElementCurrentWidth()());
+    this.editor.editorWidthPxState.set(this.primaryElementCurrentWidth()());
   }
+
 }

@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Item, ReactiveItem, dummyDatabase } from '@app/shared/models/item.model';
 import { Observable, of } from 'rxjs';
+import { SearchService } from '@app/features/search/search.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,15 +10,15 @@ export class ItemsSyncService {
 
   filteredItems:Item[] = [];
 
-  searchTerm: string = '';
-
   reactiveItems: ReactiveItem[] = [];
 
   items = signal<Item[]>([]);
 
   firstLoad = signal<boolean>(true);
 
-  constructor() { }
+  constructor(private search:SearchService) { }
+
+  //TODO: CRUD OPERATIONS SHOULDN'T BE IN SYNC SERVICE???? 
 
   getItems(): Observable<Promise<Item[]>> { //Observable<> is a class that shapes return
     // Simulate a server delay of 1 second before returning the data
@@ -59,7 +60,7 @@ export class ItemsSyncService {
         const data = await items;
         this.firstLoad() ? this.firstLoadLogic(data) : this.items.set(data);
         //En caso de que haya items filtrandose sincronizar
-        if (this.searchTerm){
+        if (this.search.searchTerm){
           this.syncFilteredItems();
         }
       }catch(error){
@@ -84,8 +85,8 @@ export class ItemsSyncService {
 
   syncFilteredItems() {
     this.filteredItems = this.items().filter(item =>
-      item.content.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      item.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+      item.content.toLowerCase().includes(this.search.searchTerm.toLowerCase()) ||
+      item.title.toLowerCase().includes(this.search.searchTerm.toLowerCase())
     );
   }
 

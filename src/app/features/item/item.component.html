@@ -16,17 +16,17 @@
         class="mask" 
         [ngClass]="
         {
-            'mask-ih': itemsState.multipleSelection() || hovered,
+            'mask-ih': itemsContainer.multipleSelection() || hovered,
             'mask-disabled': itemEditingState()
         }">
-        <div class="mask__header" [ngClass]="{'mask__header-editing': itemsState.editor() || itemsState.creation()}">
+        <div class="mask__header" [ngClass]="{'mask__header-editing': editor.editor() || editor.creation()}">
             <mat-checkbox
                 [checked]="selected"
                 (change)="handleCheckbox({state:$event.checked})"
-                *ngIf="!itemsState.editor() || !itemsState.creation()">
+                *ngIf="!editor.editor() || !editor.creation()">
             </mat-checkbox>
         </div>
-        <div class="mask__item-trigger" (click)="handleEditor()" [ngClass]="{'mask__item-trigger-editing': itemsState.editor() || itemsState.creation()}"></div>
+        <div class="mask__item-trigger" (click)="handleEditor()" [ngClass]="{'mask__item-trigger-editing': editor.editor() || editor.creation()}"></div>
     </div>
     <mat-card-content class="body">
         <div class="body__title"> 

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ItemsStateService } from '@app/core/items-state.service';
-import { ItemsSyncService } from '@app/core/items-sync.service';
+import { ItemsSyncService } from '../items-container/items-sync.service';
+import { SearchService } from './search.service';
 import { Item } from '@app/shared/models/item.model';
 
 @Component({
@@ -14,18 +14,18 @@ import { Item } from '@app/shared/models/item.model';
 })
 export class SearchComponent {
   
-  constructor(public itemsSync:ItemsSyncService, private itemsState:ItemsStateService){}
+  constructor(public itemsSync:ItemsSyncService, public search:SearchService){}
 
   clearSearchTerm(){
-    this.itemsSync.searchTerm = "";
+    this.search.searchTerm = "";
   }
 
   onFocus(){
-    this.itemsState.searchInputFocus = true;
+    this.search.searchInputFocus = true;
   }
 
   onBlur(){
-    this.itemsState.searchInputFocus = false;
+    this.search.searchInputFocus = false;
   }
 
 }

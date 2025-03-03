@@ -3,20 +3,22 @@ import { Component, AfterViewInit, effect, ElementRef, Host, signal} from '@angu
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { ItemsStateService } from '@app/core/items-state.service';
-import { ItemsSyncService } from '@app/core/items-sync.service';
-import { ResizeService } from '@app/core/resize.service';
+import { EditorService } from './editor.service';
+import { GlobalService } from '@app/core/global.service';
+import { ItemsSyncService } from '../items-container/items-sync.service';
 
 import { generateId } from '@app/shared/models/item.model';
 
 import { AutofocusDirective } from '@app/features/editor/autofocus.directive';
 
-import { ResizeBarComponent } from '@app/features/resize-bar/resize-bar.component';
+import { ResizeComponent } from '../resize/resize.component';
+
+import { toPixels } from '@app/shared/utils/units-conversion';
 
 @Component({
   selector: 'app-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule, AutofocusDirective, ResizeBarComponent],
+  imports: [CommonModule, FormsModule, AutofocusDirective, ResizeComponent],
   templateUrl: './editor.component.html',
   styleUrl: './editor.component.scss'
 })
@@ -31,12 +33,12 @@ export class EditorComponent implements AfterViewInit {
   contentInputValue:string = "";
 
   constructor(
-    public itemsState:ItemsStateService, 
-    private itemsSync:ItemsSyncService, 
+    private itemsSync:ItemsSyncService,
+    public editorService:EditorService,
     @Host() public hostElement: ElementRef,
-    public resize:ResizeService){
+    public global:GlobalService){
     effect(()=>{
-      if (this.viewInit && (this.itemsState.editor() || this.itemsState.creation())){ 
+      if (this.viewInit && (this.editorService.editor() || this.editorService.creation())){ 
 
         this.contentInputValue = this.previousData(); 
 
@@ -51,11 +53,11 @@ export class EditorComponent implements AfterViewInit {
   onTitleInput(event: Event): void {
     const inputValue = (event.target as HTMLInputElement).value;
     
-    if (this.itemsState.editor()) {
+    if (this.editorService.editor()) {
       this.handleEdition({ value: inputValue, isTitle: true });
     }
     
-    if (this.itemsState.creation()) {
+    if (this.editorService.creation()) {
       this.handleCreation({ value: inputValue, isTitle: true });
     }
   } 
@@ -63,28 +65,28 @@ export class EditorComponent implements AfterViewInit {
   onContentInput(event: Event): void {
     const inputValue = (event.target as HTMLTextAreaElement).value;
     
-    if (this.itemsState.editor()) {
+    if (this.editorService.editor()) {
       this.handleEdition({ value: inputValue });
     }
     
-    if (this.itemsState.creation()) {
+    if (this.editorService.creation()) {
       this.handleCreation({ value: inputValue });
     }
   }
 
 
   previousData(title:boolean = false):string {
-    if(this.itemsState.editor() && !title){
-      return this.itemsState.editorData().content;
+    if(this.editorService.editor() && !title){
+      return this.editorService.editorData().content;
     }
-    else if (this.itemsState.creation() && this.itemsState.creationData() && !title){
-      return this.itemsState.creationData().content;
+    else if (this.editorService.creation() && this.editorService.creationData() && !title){
+      return this.editorService.creationData().content;
     }
-    else if (this.itemsState.editor() && title){
-      return this.itemsState.editorData().title;
+    else if (this.editorService.editor() && title){
+      return this.editorService.editorData().title;
     }
-    else if (this.itemsState.creation() && this.itemsState.creationData() && title){
-      return this.itemsState.creationData().title;
+    else if (this.editorService.creation() && this.editorService.creationData() && title){
+      return this.editorService.creationData().title;
     }
     else if (title) {
       return "";
@@ -94,7 +96,7 @@ export class EditorComponent implements AfterViewInit {
   }
 
   handleEdition({ value, isTitle = false }: { value: string; isTitle?: boolean }): void {
-    const { editorData } = this.itemsState;
+    const { editorData } = this.editorService;
     const { content, title } = editorData();  
 
     const updatedData = {
@@ -108,15 +110,16 @@ export class EditorComponent implements AfterViewInit {
   } 
 
   handleCreation({ value, isTitle = false }: { value: string; isTitle?: boolean }): void {
-    const { creationData } = this.itemsState;
-    const currentData = creationData() ?? { content: "", title: "Title Undefined" };
+    const { creationData } = this.editorService;
+    const currentData = creationData() ?? { content: "", title: "" };
+    if (!currentData.title) currentData.title = "Title Undefined";
     const { id, content, title } = currentData;
     
     const updatedData = {
       ...currentData,
       id: generateId(),
       modificationDate: new Date().toISOString(),
-      title: isTitle ? value : "Title Undefined",
+      title: isTitle ? value : currentData.title,
       content: isTitle ? content : value
     };  
 
@@ -125,12 +128,12 @@ export class EditorComponent implements AfterViewInit {
 
 
   ngAfterViewInit() {
-    if(!this.resize.primaryElementWidthPxPrevious){
-      this.resize.primaryElementWidthPx.set(this.resize.toPixels(40));
+    if(!this.editorService.editorWidthPxPreviousState){
+      this.editorService.editorWidthPxState.set(toPixels(40));
     } else {
-      this.resize.primaryElementWidthPx.set(this.resize.primaryElementWidthPxPrevious);
+      this.editorService.editorWidthPxState.set(this.editorService.editorWidthPxPreviousState);
     }
-    this.resize.primaryElementCurrentWidth = this.getCurrentWidth;
+    this.editorService.editorWidthPxCurrent = this.getCurrentWidth;
     this.viewInit = true;
     setTimeout(()=>{
       this.contentInputValue = this.previousData();
