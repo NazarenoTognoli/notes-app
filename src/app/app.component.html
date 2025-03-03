@@ -3,10 +3,10 @@
 <div id="app-body">
 
   <app-items-container
-  
+  #itemsContainerId
   *ngIf="
   (!editor.editor() && !editor.creation()) || !global.isResolutionSmall" 
-  [ngClass]="{ 'items-container-while-editing': editor.editor() || editor.creation() }" 
+  [ngClass]="{ 'items-container-while-editing': editor.editor() || editor.creation()}" 
   [style.width.%]="itemsContainer.itemsContainerWidthPctState()">
   
   </app-items-container>
@@ -18,6 +18,6 @@
   [style.width.%]="!global.isResolutionSmall ? editor.editorWidthPctState() : 100"
   [ngClass]="{'app-editor-smallresolution':global.isResolutionSmall}">
   
-  </app-editor>  
+  </app-editor>
 
 </div>

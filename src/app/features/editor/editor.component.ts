@@ -103,7 +103,7 @@ export class EditorComponent implements AfterViewInit {
       ...editorData(),
       content: isTitle ? content : value,
       title: isTitle ? value : title,
-      modificationDate: new Date().toISOString()
+      modificationDate: new Date().toString()
     };  
 
     editorData.set(updatedData);
@@ -118,7 +118,7 @@ export class EditorComponent implements AfterViewInit {
     const updatedData = {
       ...currentData,
       id: generateId(),
-      modificationDate: new Date().toISOString(),
+      modificationDate: new Date().toString(),
       title: isTitle ? value : currentData.title,
       content: isTitle ? content : value
     };  

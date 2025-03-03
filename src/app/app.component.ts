@@ -1,6 +1,6 @@
 //ANGULAR
 import { CommonModule } from '@angular/common';
-import { Component, signal, effect, OnInit } from '@angular/core';
+import { Component, signal, effect, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 //LIBRARIES
 import { of, from } from 'rxjs';
@@ -50,4 +50,5 @@ export class AppComponent {
   ngOnInit(){
     this.itemsSync.refreshItems();
   }
+  
 }

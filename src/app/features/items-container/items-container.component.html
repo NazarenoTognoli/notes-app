@@ -15,3 +15,13 @@
 <span *ngIf="search.searchTerm && itemsSync.filteredItems.length === 0" class="no-items-message">
   No notes found.
 </span>
+
+<div id="confirm-action" *ngIf="itemsContainerService.confirmActionFlag()">
+  <div class="message">
+    will you discard changes?
+  </div>
+  <div class="controls">
+    <button (click)="handleDiscardChanges()"><span>yes</span></button>
+    <button (click)="itemsContainerService.confirmActionFlag.set(false)"><span>no</span></button>
+  </div>
+</div>

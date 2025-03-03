@@ -6,15 +6,17 @@
     top: 60px;
 }
 div {
-    width: 100%;
+    width: calc(100% - 5px);
     height: 100%;
     background: #282728;
     display: inherit;
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
-    padding-right: 3px;
+    //padding-right: 3px;
+    margin-right: 23px;
     margin-left: 5px;
+    box-sizing: border-box;
     border-left: 1px solid #aaa;
 }
 .editor__div-smallresolution {
@@ -53,6 +55,7 @@ div {
     font-size: 17px;
     color: #FFF;
     padding: 10px;
+    font-family: 'Quicksand';
 }
 textarea {
     resize: none;
@@ -60,6 +63,7 @@ textarea {
     height: 95%;
     height: calc(95% - 40px);
     font-size: 17px;
+    font-family: 'Quicksand';
     color: #FFF;
     background: #282728;
     outline: none;

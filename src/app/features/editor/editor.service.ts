@@ -15,14 +15,11 @@ export class EditorService {
   //EDITOR STATE LOGIC HERE
   creation = signal<boolean>(false);
   //EDITOR STATE LOGIC HERE
-  creationData;
+  creationData = signal<Item>({title:"", content:"", modificationDate:"", id:'a0'});
   //EDITOR STATE LOGIC HERE
-  editorData;
+  editorData = signal<Item>({title:"", content:"", modificationDate:"", id:'a0'});
 
-  constructor(private itemsSync: ItemsSyncService){
-    this.editorData = signal<Item>(this.itemsSync.items()[0]);
-    this.creationData = signal<Item>(this.itemsSync.items()[0]);
-  }
+  constructor(private itemsSync: ItemsSyncService){}
 
   normalizeSizeAndTrackPrevious = () => {
     if(this.editorWidthPxState()) this.editorWidthPxPreviousState = this.editorWidthPxState();

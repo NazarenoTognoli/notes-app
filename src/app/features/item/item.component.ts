@@ -66,6 +66,21 @@ export class ItemComponent {
     if (this.itemsContainer.multipleSelection()) {
       return;
     }
+    
+    const oldReference = () => this.itemsSync.items().findIndex(item => item.id === this.editor.editorData().id);
+    
+    if (oldReference() === -1) this.editor.editorData.set(this.data());
+    
+    const editorActive:boolean = this.editor.editor() || this.editor.creation();
+
+    const matchTitle:boolean = this.editor.editorData().title === this.itemsSync.items()[oldReference()].title;
+    const matchContent:boolean = this.editor.editorData().content === this.itemsSync.items()[oldReference()].content;
+
+    if (editorActive && (!matchTitle || !matchContent)){
+      this.itemsContainer.dataStanding = this.data();
+      this.itemsContainer.confirmActionFlag.set(true);
+      return;
+    }
 
     // Reseteamos los estados de edición y creación
     this.editor.editor.set(false);
