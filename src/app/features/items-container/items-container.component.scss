@@ -68,6 +68,7 @@ button {
   transition: filter 0.3s ease;
   display: flex;
   align-items: center;
+  line-height: 2;
 }
 button:hover {
   filter: brightness(60%);
