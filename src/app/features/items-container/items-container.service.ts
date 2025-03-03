@@ -19,7 +19,7 @@ export class ItemsContainerService implements OnInit {
   itemsContainerWidthPctState = computed(() => toPercentage(this.itemsContainerWidthPxState()));
 
   constructor(private editor:EditorService, private itemsSync:ItemsSyncService) {
-    this.dataStanding = itemsSync.items()[0];
+    this.dataStanding = {title:"", content:"", id:"", modificationDate:""};
   }
 
   ngOnInit(){
