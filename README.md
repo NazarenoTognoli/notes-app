@@ -16,7 +16,7 @@ Instructions for how to use the APP UI below.
 - Fill the fields to add the data of the note.
 - Click "Confirm" to finish the creation of the note or click "Cancel" to cancel the creation. 
 
-# Notes Removing (At least one selected note is required)
+### Notes Removing (At least one selected note is required)
 
 - Click "select" to enter selection mode or hover a note and then click the checkbox to enter selection mode.
 - Click "cancel" while the selection mode is active to turn off the selection mode.
@@ -25,13 +25,13 @@ Instructions for how to use the APP UI below.
 
 - Click "del" to remove a selected note.
 
-# Notes Editing and Reading
+### Notes Editing and Reading
 
 - Click the body of note to enter editing mode, the editor will open.
 - Fill the fields to change the data of the note.
 - Click "Confirm" to confirm the editing of the note or click "Cancel" to cancel the editing.
 
-# Filter notes by content and by title
+### Filter notes by content and by title
 
 - Click the search-bar at the left-top of the UI.
 - Fill the field with the value you want to find.
