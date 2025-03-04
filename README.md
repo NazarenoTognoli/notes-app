@@ -2,7 +2,7 @@
 
 In this Web APP you can Create, Read, Update, Delete and Navigate information (Notes).
 
-This APP is the frontend side of a Restful API in ASP.NET that should be in a public repo at the same [Github Account](https://github.com/NazarenoTognoli).
+This APP is the frontend side of a Restful API in ASP.NET that should be in a public repo at the same [Github Profile](https://github.com/NazarenoTognoli).
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.1.
 
