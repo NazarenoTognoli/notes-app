@@ -10,7 +10,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Instructions for how to use the APP UI below.
 
-# Notes Creation
+### Notes Creation
 
 - Click "Add" to start the creation of a note, the editor will open.
 - Fill the fields to add the data of the note.
