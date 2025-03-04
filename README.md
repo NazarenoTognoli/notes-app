@@ -27,7 +27,7 @@ Instructions for how to use the APP UI below.
 
 ### Notes Editing and Reading
 
-- Click the body of note to enter editing mode, the editor will open.
+- Click the body of the note you want to modify to enter editing mode, the editor will open.
 - Fill the fields to change the data of the note.
 - Click "Confirm" to confirm the editing of the note or click "Cancel" to cancel the editing.
 
