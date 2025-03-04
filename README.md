@@ -1,8 +1,8 @@
 # NotesApp
 
-In this Web APP you can Create, Read, Update, Delete and Navigate information (Notes).
+In this web app you can perform CRUD operations on notes with a great UX.
 
-This APP is the frontend side of a Restful API made in ASP.NET, SQL and Entity Framework, the backend side should be in a public repo at the same [Github Profile](https://github.com/NazarenoTognoli).
+This app is the frontend side of a Restful API made in ASP.NET, SQL and Entity Framework, the backend side should be in a public repo at the same [Github Profile](https://github.com/NazarenoTognoli).
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.1.
 
