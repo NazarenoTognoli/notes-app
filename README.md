@@ -1,6 +1,6 @@
 # NotesApp
 
-In this web app you can perform CRUD operations on notes with a great UX.
+In this web app you can perform CRUD operations on notes with a great UX, responsive design and reactive elements to various conditionals to ensure a focus on usability.
 
 This app is the frontend side of a Restful API made in ASP.NET, SQL and Entity Framework, the backend side should be in a public repo at the same [Github Profile](https://github.com/NazarenoTognoli).
 
